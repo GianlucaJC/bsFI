@@ -14,11 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::group(['only_log' => ['auth']], function () {
+	Route::get('dashboard', [ 'as' => 'dashboard', 'uses' => 'App\Http\Controllers\MainController@dashboard']);
+	//->middleware(['permission:gestione_archivi'])
+
+
 	Route::get('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita']);
 	//->middleware(['permission:gestione_archivi'])
 	

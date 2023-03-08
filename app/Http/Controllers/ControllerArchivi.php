@@ -21,12 +21,18 @@ class ControllerArchivi extends Controller
 
 		//Creazione nuovo elemento
 		if (strlen($descr_contr)!=0 && $edit_elem==0) {
+			$def = new definizione_attivita;
 			$descr_contr=strtoupper($descr_contr);
 			$arr=array();
-			$arr['dele']=0;
-			$arr['descrizione']=$descr_contr;
-			$arr['ref_categoria']=$categ;
-			DB::table("definizione_attivita")->insert($arr);
+			$def->dele=0;
+			$def->ordine=0;
+			$def->descrizione=$descr_contr;
+			$def->ref_categoria=$categ;
+			$def->save();
+			$id_def=$def->id;
+			$ordine=$id_def*100;
+			definizione_attivita::where('id', $id_def)
+			  ->update(['ordine' => $ordine]);			
 		}
 		
 		//Modifica elemento
@@ -48,7 +54,7 @@ class ControllerArchivi extends Controller
 		
 		$categorie=categorie::select("id","categoria")
 		->where("dele","=",0)
-		->orderBy('categoria')
+		->orderBy('ordine')
 		->get();
 		
 		$definizione_attivita=DB::table('definizione_attivita as a')
@@ -57,7 +63,9 @@ class ControllerArchivi extends Controller
 		->when($view_dele=="0", function ($definizione_attivita) {
 			return $definizione_attivita->where('a.dele', "=","0");
 		})
-		->orderBy('a.descrizione')->get();
+		->orderBy('c.ordine')
+		->orderBy('a.ordine')
+		->get();
 
 		return view('all_views/gestione/definizione_attivita')->with('definizione_attivita', $definizione_attivita)->with("view_dele",$view_dele)->with("categorie",$categorie);
 		
