@@ -88,6 +88,11 @@
 					<div class="form-floating mb-3 mb-md-0">
 						<select class="form-select" id="funzionario" aria-label="Funzionario" name='funzionario' onchange="$('#frm_dash').submit();" placeholder="Funzionario">
 							<option value=''>Select...</option>
+							<option value='all'
+								@if ($funzionario=="all") 
+									selected
+								@endif
+							>Tutti</option>
 							<?php
 								
 								foreach ($users as $utente) {

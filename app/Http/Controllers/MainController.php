@@ -68,18 +68,22 @@ public function __construct()
 		if ($this->tipouser==1 && strlen($funzionario)==0) return array();
 		$ref_user=$this->id_user;
 		if ($this->tipouser==1) $ref_user=$funzionario;
-		
+
 		$resp=array();
-		if (substr($periodo,0,7)=="Globale") {
+		if (substr($periodo,0,7)=="Globale" || ($ref_user=="all")) {
 			$annoref=substr($periodo,7);
+			
 			$schemi=DB::table('schemi as s')
 			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'))
 			->where('periodo','like',"%$annoref%")
-			->where('id_funzionario','=',$ref_user)
+			->when($ref_user!="all", function ($schemi) use ($ref_user) {
+				return $schemi->where('id_funzionario','=',$ref_user);
+			})			
 			->groupBy('id_categoria')
 			->groupBy('id_attivita')
 			->groupBy('id_settore')
 			->get();
+						
 		} else {
 			$schemi=DB::table('schemi as s')
 			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
