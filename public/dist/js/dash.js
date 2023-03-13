@@ -83,6 +83,10 @@ function savedata() {
 			risp=JSON.parse(data)
 			if (risp.header=="OK") $("#frm_dash").submit();
 			else alert("Problemi occorsi durante il salvataggio!")
+		},
+		error: function(){
+			$("#div_wait").empty();
+			alert("Verificare Periodo ed Operatore!")
 		}
 		
 	})
