@@ -70,11 +70,23 @@ public function __construct()
 		if ($this->tipouser==1) $ref_user=$funzionario;
 		
 		$resp=array();
-		$schemi=DB::table('schemi as s')
-		->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
-		->where('periodo','=',$periodo)
-		->where('id_funzionario','=',$ref_user)
-		->get();
+		if (substr($periodo,0,7)=="Globale") {
+			$annoref=substr($periodo,7);
+			$schemi=DB::table('schemi as s')
+			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'))
+			->where('periodo','like',"%$annoref%")
+			->where('id_funzionario','=',$ref_user)
+			->groupBy('id_categoria')
+			->groupBy('id_attivita')
+			->groupBy('id_settore')
+			->get();
+		} else {
+			$schemi=DB::table('schemi as s')
+			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
+			->where('periodo','=',$periodo)
+			->where('id_funzionario','=',$ref_user)
+			->get();
+		}
 		
 		foreach($schemi as $schema) {
 			$id_cat=$schema->id_cat;
@@ -93,7 +105,9 @@ public function __construct()
 		for ($anno=$annocur;$anno>=2022;$anno--) {
 			$mese=$mesecur;
 			if ($anno!=$annocur) $mese=12;
+			$inizio=0;
 			for ($sca=$mese;$sca>=1;$sca--) {
+				if ($inizio==0 && $sca!=12) $periodi["Globale$anno"]="Globale$anno";
 				if ($sca==1) $per="GEN";
 				if ($sca==2) $per="FEB";
 				if ($sca==3) $per="MAR";
@@ -108,8 +122,13 @@ public function __construct()
 				if ($sca==12) $per="DIC";
 				$periodo=$per.trim($anno);
 				$periodi[$periodo]=$periodo;
+				if ($sca==12) {
+					$periodi["Globale$anno"]="Globale$anno";
+				}
+				$inizio=1;
 			}
 		}
+		
 		
 		return $periodi;
 	}
@@ -162,54 +181,67 @@ public function __construct()
 		$elenco[0]['settore']="Ed.IND";
 		$elenco[0]['bcolor']="yellow";
 		$elenco[0]['color']="black";
+		$elenco[0]['dele']=0;
 		
 		$elenco[1]['settore']="Ed.COOP";
 		$elenco[1]['bcolor']="yellow";
 		$elenco[1]['color']="black";
+		$elenco[1]['dele']=0;
 		
 		$elenco[2]['settore']="Ed.ART.";
 		$elenco[2]['bcolor']="yellow";
 		$elenco[2]['color']="black";
+		$elenco[2]['dele']=0;
 		
 		$elenco[3]['settore']="LEGNO IND";
 		$elenco[3]['bcolor']="green";
 		$elenco[3]['color']="white";
+		$elenco[3]['dele']=0;
 		
 		$elenco[4]['settore']="LEGNO PMI";
 		$elenco[4]['bcolor']="green";
 		$elenco[4]['color']="white";
+		$elenco[4]['dele']=0;
 		
 		$elenco[5]['settore']="LEGNO ART";
 		$elenco[5]['bcolor']="green";
 		$elenco[5]['color']="white";
+		$elenco[5]['dele']=0;
 		
 		$elenco[6]['settore']="MANUF.IND";
 		$elenco[6]['bcolor']="orange";
 		$elenco[6]['color']="white";
+		$elenco[6]['dele']=0;
 		
 		$elenco[7]['settore']="MANUF.PMI";
 		$elenco[7]['bcolor']="orange";
 		$elenco[7]['color']="white";
+		$elenco[7]['dele']=0;
 		
 		$elenco[8]['settore']="MANUF.ART";
 		$elenco[8]['bcolor']="orange";
 		$elenco[8]['color']="white";
+		$elenco[8]['dele']=0;
 		
 		$elenco[9]['settore']="LAPID.IND";
 		$elenco[9]['bcolor']="blueviolet";
 		$elenco[9]['color']="white";
+		$elenco[9]['dele']=0;
 		
 		$elenco[10]['settore']="LAPID.PMI";
 		$elenco[10]['bcolor']="blueviolet";
 		$elenco[10]['color']="white";
+		$elenco[10]['dele']=0;
 		
 		$elenco[11]['settore']="LAPID.ART";
 		$elenco[11]['bcolor']="blueviolet";
 		$elenco[11]['color']="white";
+		$elenco[11]['dele']=0;
 		
 		$elenco[12]['settore']="CEMENTO";
 		$elenco[12]['bcolor']="blueviolet";
 		$elenco[12]['color']="white";
+		$elenco[12]['dele']=0;
 		return $elenco;
 	}
 
