@@ -154,7 +154,7 @@
 							
 							$id_attivita=$attivita[$sca]['id_attivita'];
 							$js=" onclick=\"setvalue($ref_user,'$periodo',$categoria,$id_attivita);\"";
-							if (substr($periodo,0,7)=="Globale") $js="";
+							if (substr($periodo,0,7)=="Globale" || $funzionario=="all") $js="";
 							$descr=$attivita[$sca]['descrizione'];
 							echo "<tr>";
 								echo "<td><b>";
