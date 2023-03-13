@@ -7,27 +7,112 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\definizione_attivita;
 use App\Models\categorie;
+use App\Models\User;
+use App\Models\schemi;
+use Illuminate\Support\Facades\Auth;
 
 use DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 
 class mainController extends Controller
 {
+private $id_user;
+private $user;	
+private $tipouser;
+
 public function __construct()
 	{
-		//$this->middleware('auth')->except(['index']);
+		$this->middleware('auth')->except(['index']);
+
+		$this->middleware(function ($request, $next) {			
+			$id=Auth::user()->id;
+			$user = User::find($id);
+			$this->id_user=$id;
+
+			if ($user->hasRole('admin')) $this->tipouser=1;
+			else $this->tipouser=0;
+			$this->user = $user;
+			return $next($request);
+		});		
+		
 	}	
 
 	public function dashboard(Request $request){
+
+		$periodo=$request->input("periodo");
+		$funzionario=$request->input("funzionario");
 		
+		$ref_user=$this->id_user;
+		if ($this->tipouser==1) $ref_user=$funzionario;
+		
+		$users=user::select('id','name')->orderBy('name')->get();
+		$periodi=$this->periodi();
 		$attivita_index=$this->attivita_index();
 		$categorie=$this->cat_index();
 		$settori=$this->settori();
+		$schema=$this->schema($request);
 
-		return view('dashboard')->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori);
+		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('users',$users)->with("schema",$schema)->with('ref_user',$ref_user);
 		
 	}	
 	
+	public function schema($request) {
+		if (!$request->has("periodo")) return array();
+		
+		//$this->tipouser;
+		$periodo=$request->input("periodo");
+		$funzionario=$request->input("funzionario");
+
+		if ($this->tipouser==1 && strlen($funzionario)==0) return array();
+		$ref_user=$this->id_user;
+		if ($this->tipouser==1) $ref_user=$funzionario;
+		
+		$resp=array();
+		$schemi=DB::table('schemi as s')
+		->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
+		->where('periodo','=',$periodo)
+		->where('id_funzionario','=',$ref_user)
+		->get();
+		
+		foreach($schemi as $schema) {
+			$id_cat=$schema->id_cat;
+			$id_attivita=$schema->id_attivita;
+			$id_settore=$schema->id_settore;
+			$valore=$schema->valore;
+			$resp[$id_cat][$id_attivita][$id_settore]=$valore;
+		}
+		return $resp;
+	}
+	
+	public function periodi() {
+		$periodi=$periodi=array();
+		$annocur=intval(date("Y"));
+		$mesecur=intval(date("m"));
+		for ($anno=$annocur;$anno>=2022;$anno--) {
+			$mese=$mesecur;
+			if ($anno!=$annocur) $mese=12;
+			for ($sca=$mese;$sca>=1;$sca--) {
+				if ($sca==1) $per="GEN";
+				if ($sca==2) $per="FEB";
+				if ($sca==3) $per="MAR";
+				if ($sca==4) $per="APR";
+				if ($sca==5) $per="MAG";
+				if ($sca==6) $per="GIU";
+				if ($sca==7) $per="LUG";
+				if ($sca==8) $per="AGO";
+				if ($sca==9) $per="SET";
+				if ($sca==10) $per="OTT";
+				if ($sca==11) $per="NOV";
+				if ($sca==12) $per="DIC";
+				$periodo=$per.trim($anno);
+				$periodi[$periodo]=$periodo;
+			}
+		}
+		
+		return $periodi;
+	}
 	
 	public function attivita_index() {
 		$definizione_attivita=DB::table('definizione_attivita as a')
@@ -64,6 +149,11 @@ public function __construct()
 		
 		return $cat;
 	}	
+	
+	public function getsettori() {
+		$settori=$this->settori();
+		echo json_encode($settori);
+	}
 	
 	public function settori() {
 		

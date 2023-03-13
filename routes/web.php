@@ -17,17 +17,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['only_log' => ['auth']], function () {
 	Route::get('dashboard', [ 'as' => 'dashboard', 'uses' => 'App\Http\Controllers\MainController@dashboard']);
-	//->middleware(['permission:gestione_archivi'])
+	Route::post('dashboard', [ 'as' => 'dashboard', 'uses' => 'App\Http\Controllers\MainController@dashboard']);
 
 
-	Route::get('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita']);
-	//->middleware(['permission:gestione_archivi'])
+	Route::get('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita'])
+	->middleware(['role:admin']);
 	
-	Route::post('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita']);
-	//->middleware(['permission:gestione_archivi'])	
+	Route::post('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita'])
+	->middleware(['role:admin']);
 });	
 
 
+//routing Ajax
+Route::group(['only_log' => ['auth']], function () {
+	Route::post('setvalue', [ 'as' => 'setvalue', 'uses' =>'App\Http\Controllers\AjaxController@setvalue']);	
+
+	Route::post('savedata', [ 'as' => 'savedata', 'uses' =>'App\Http\Controllers\AjaxController@savedata']);
+	
+	Route::post('getsettori', [ 'as' => 'getsettori', 'uses' =>'App\Http\Controllers\MainController@getsettori']);	
+});
+
+
+//routing Auth
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

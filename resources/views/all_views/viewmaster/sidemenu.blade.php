@@ -18,27 +18,17 @@ use App\Models\User;
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-			
+			@if ($user->hasRole('admin'))
 				<img src="{{ URL::asset('/') }}dist/img/AdminLTELogo.png" class="img-circle elevation-2" alt="User Image">
-
-		
+			@else
+				<img src="{{ URL::asset('/') }}dist/img/avatar1.png" class="img-circle elevation-2" alt="User Image">
+			@endif
         </div>
         <div class="info">
           <a href="#" class="d-block">{{ Auth::user()->name }}</a>
         </div>
       </div>
 
-      <!-- SidebarSearch Form -->
-      <div class="form-inline">
-        <div class="input-group" data-widget="sidebar-search">
-          <input class="form-control form-control-sidebar" type="search" placeholder="Cerca" aria-label="Cerca">
-          <div class="input-group-append">
-            <button class="btn btn-sidebar">
-              <i class="fas fa-search fa-fw"></i>
-            </button>
-          </div>
-        </div>
-      </div>
 
       <!-- Sidebar Menu -->
       <nav class="mt-2">
@@ -72,7 +62,7 @@ use App\Models\User;
 			<?php } ?>
 
 		
-
+			@if ($user->hasRole('admin'))
 			  <li class="nav-item menu">
 				<a href="#" class="nav-link">
 				  <i class="fas fa-cogs"></i> 
@@ -90,7 +80,8 @@ use App\Models\User;
 				  </li>
 				</ul>  
 			   </li>	
-			  
+			   
+			@endif 
 			
 			
           

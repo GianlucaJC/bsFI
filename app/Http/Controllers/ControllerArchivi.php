@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\definizione_attivita;
 use App\Models\categorie;
+
 use DB;
 
 class ControllerArchivi extends Controller
 {
+	public function __construct()	
+	{
+		$this->middleware('auth')->except(['index']);
+	}		
 	public function definizione_attivita(Request $request){
 		$edit_elem=0;
 		if ($request->has("edit_elem")) $edit_elem=$request->input("edit_elem");

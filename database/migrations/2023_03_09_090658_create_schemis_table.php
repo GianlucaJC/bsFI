@@ -20,7 +20,7 @@ return new class extends Migration
 			$table->integer('id_categoria')->index();
 			$table->integer('id_attivita')->index();
 			$table->integer('id_settore')->index();
-			$table->integer('valore');
+			$table->integer('valore')->nullable();
             $table->timestamps();
         });
 

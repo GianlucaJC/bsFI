@@ -152,7 +152,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
   
    @extends('all_views.viewmaster.sidemenu')
 
-   <center>Sviluppo prototipale by <b>Custom Sotware</b></center>
+   <center>Sviluppo prototipale by <b>Custom Software</b></center>
    @yield('content_main')  
 
    @extends('all_views.viewmaster.sidebar')

@@ -1,9 +1,3 @@
-<?php
-use App\Models\User;
-	$id = Auth::user()->id;
-	$user = User::find($id);
-?>
-
 <style>
 
  #tb_attivita td {
@@ -68,11 +62,51 @@ use App\Models\User;
     <!-- /.content-header -->
 
     <!-- Main content -->
+	<form method='post' action="{{ route('dashboard') }}" id='frm_dash' name='frm_dash' autocomplete="off" class="needs-validation" autocomplete="off">
     <div class="content">
+	<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
+	
       <div class="container-fluid">
+		<div class="row mb-3">
+			<div class="col-md-6">
+				<div class="form-floating mb-3 mb-md-0">
+					<select class="form-select" id="periodo" aria-label="Periodo" name='periodo' onchange="$('#frm_dash').submit();" placeholder="Periodo" >
+						<option value=''>Select...</option>
+						<?php
+							foreach ($periodi as $id_per=>$per) {
+								echo "<option value='".$id_per."' ";
+								if ($periodo==$id_per) echo " selected ";
+								echo ">".$per."</option>";
+							}
+						?>
+					</select>
+					<label for="periodo">Periodo</label>
+				</div>
+			</div>
+			@if ($user->hasRole('admin'))
+				<div class="col-md-6">
+					<div class="form-floating mb-3 mb-md-0">
+						<select class="form-select" id="funzionario" aria-label="Funzionario" name='funzionario' onchange="$('#frm_dash').submit();" placeholder="Funzionario">
+							<option value=''>Select...</option>
+							<?php
+								
+								foreach ($users as $utente) {
+									echo "<option value='".$utente->id."' ";
+									if ($funzionario==$utente->id) echo " selected ";
+									echo ">".$utente->name."</option>";
+								}
+								
+							?>
+						</select>
+						<label for="funzionario">Funzionario</label>
+					</div>
+				</div>
+			@endif
+
+		</div>	
 		<?php
-			
-			$att=1;
+		
+
 			foreach($categorie as $categoria=>$categ) {
 				if (isset($attivita_index[$categoria])) {?>
 				
@@ -113,21 +147,28 @@ use App\Models\User;
 						for ($sca=0;$sca<=count($attivita)-1;$sca++) {
 							if (!isset($attivita[$sca]['descrizione'])) continue;
 							
+							$id_attivita=$attivita[$sca]['id_attivita'];
+							$js=" onclick=\"setvalue($ref_user,'$periodo',$categoria,$id_attivita);\"";
+
 							$descr=$attivita[$sca]['descrizione'];
 							echo "<tr>";
-								echo "<td>";
-								  echo "<b>$descr</b>";
-								echo "</td>";
+								echo "<td><b>";
+									echo "<a href='javascript:void(0)' class='text-muted' $js>$descr</a>";
+								echo "</b></td>";
+								
 								foreach($settori as $id_settore=>$v) {
-									echo "<td>";
-									  echo "<a href='#' class='text-muted'>";
-										echo "";
+									echo "<td style='text-align:center'>";
+									  echo "<a href='javascript:void(0)' class='text-muted' $js>";
+										
+										if (isset($schema[$categoria][$id_attivita][$id_settore])) 
+											echo $schema[$categoria][$id_attivita][$id_settore];
+										
 									  echo "</a>";
 									echo "</td>";
 								}	
 							echo "<td></td>";
 							echo "<td>";
-								echo "<a href='#' class='text-muted'>";
+								echo "<a href='javascript:void(0)' class='text-muted' $js>";
 									echo "<i class='fas fa-search'></i>";
 								echo "</a>";
 							echo "</td>";
@@ -153,6 +194,33 @@ use App\Models\User;
 
       </div><!-- /.container-fluid -->
     </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade bd-example-modal-lg" id="modalvalue" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Inserimento/modifica dati</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id='bodyvalue'>
+        ...
+      </div>
+	  <div id='div_wait' class='mb-3'></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+        <div id='div_save'></div>
+      </div>
+	  
+    </div>
+  </div>
+</div>	
+	
+	</form>
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
@@ -167,6 +235,6 @@ use App\Models\User;
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.05"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.212"></script>
 	
 @endsection
