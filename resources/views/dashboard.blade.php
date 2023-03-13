@@ -235,6 +235,6 @@
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.213"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.227"></script>
 	
 @endsection

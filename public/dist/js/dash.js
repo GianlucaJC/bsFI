@@ -92,11 +92,13 @@ function savedata() {
 	})
 }
 function obj(name,place,rowopen,rowclose) {	
+	altro="onkeypress=\"return (event.charCode !=8 && event.charCode ==0 || (event.charCode >= 48 && event.charCode <= 57))\""
+
 	info="";
 	if (rowopen==true) info="<div class='row mb-2'>";
 		info+="<div class='col-md-6'>";
 			info+="<div class='form-floating mb-3 mb-md-0'>";
-				info+="<input class='form-control campi' id='"+name+"' name='"+name+"' type='text' placeholder='"+place+"'/>";
+				info+="<input class='form-control campi' id='"+name+"' name='"+name+"' "+altro+" type='text' placeholder='"+place+"'/>";
 				info+="<label for='"+name+"'>"+place+"</label>";
 			info+="</div>";
 		info+="</div>";
