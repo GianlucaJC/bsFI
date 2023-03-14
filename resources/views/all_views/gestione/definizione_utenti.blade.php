@@ -78,11 +78,11 @@
 								<td>
 									<span id='profilo{{$utenti->id}}' data-descr='{{$utenti->role_id}}'></span>
 									@if ($utenti->role_id=="1")
-										<p class="font-weight-bold">{{ $utenti->utentefillea }}</p>
+										<p class="font-weight-bold">{{ strtoupper($utenti->utentefillea) }}</p>
 									@elseif ($utenti->role_id=="3") 
-										<p class="font-weight">{{$utenti->utentefillea }}</p>
+										<p class="font-weight">{{strtoupper($utenti->utentefillea) }}</p>
 									@else 
-										<p class="font-italic">{{$utenti->utentefillea }}</p>
+										<p class="font-italic">{{strtoupper($utenti->utentefillea) }}</p>
 									@endif
 								</td>
 								<td>
