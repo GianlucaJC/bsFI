@@ -59,14 +59,18 @@
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
     </div>
+	
     <!-- /.content-header -->
 
     <!-- Main content -->
 	<form method='post' action="{{ route('dashboard') }}" id='frm_dash' name='frm_dash' autocomplete="off" class="needs-validation" autocomplete="off">
     <div class="content">
 	<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
+	<input type='hidden' name='confr' id='confr' value="{{$confr}}">
 	
-      <div class="container-fluid">
+     
+	 <div class="container-fluid">
+	 <button type="button" onclick="attiva_confr()" class="btn btn-primary mb-3">Attiva/Disattiva Confronto</button>
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<div class="form-floating mb-3 mb-md-0">
@@ -109,6 +113,54 @@
 			@endif
 
 		</div>	
+		
+		<?php
+			$vis="none";
+			if ($confr=="1") $vis="";
+		?>
+		<div class="row mb-3" style='display:{{$vis}}' id='div_confr'>
+			<div class="col-md-6">
+				<div class="form-floating mb-3 mb-md-0">
+					<select class="form-select" id="periodo1" aria-label="Periodo1" name='periodo1' onchange="$('#frm_dash').submit();" placeholder="Periodo confronto" >
+						<option value=''>Select...</option>
+						<?php
+							foreach ($periodi as $id_per=>$per) {
+								//if (substr($per,0,7)=="Globale") continue;
+								echo "<option value='".$id_per."' ";
+								if ($periodo1==$id_per) echo " selected ";
+								echo ">".$per."</option>";
+							}
+						?>
+					</select>
+					<label for="periodo1">Periodo Confronto</label>
+				</div>
+			</div>
+			@if ($user->hasRole('admin'))
+				<div class="col-md-6">
+					<div class="form-floating mb-3 mb-md-0">
+						<select class="form-select" id="funzionario1" aria-label="Funzionario1" name='funzionario1' onchange="$('#frm_dash').submit();" placeholder="Funzionario1">
+							<option value=''>Select...</option>
+							<option value='all'
+								@if ($funzionario1=="all") 
+									selected
+								@endif
+							>Tutti</option>
+							<?php
+								
+								foreach ($users as $utente) {
+									echo "<option value='".$utente->id."' ";
+									if ($funzionario1==$utente->id) echo " selected ";
+									echo ">".$utente->name."</option>";
+								}
+								
+							?>
+						</select>
+						<label for="funzionario1">Funzionario Confronto</label>
+					</div>
+				</div>
+			@endif
+
+		</div>			
 		<?php
 		
 
@@ -155,6 +207,7 @@
 							$id_attivita=$attivita[$sca]['id_attivita'];
 							$js=" onclick=\"setvalue($ref_user,'$periodo',$categoria,$id_attivita);\"";
 							if (substr($periodo,0,7)=="Globale" || $funzionario=="all") $js="";
+							
 							$descr=$attivita[$sca]['descrizione'];
 							echo "<tr>";
 								echo "<td><b>";
@@ -165,9 +218,15 @@
 									echo "<td style='text-align:center'>";
 									  echo "<a href='javascript:void(0)' class='text-muted' $js>";
 										
+										$v1="?";
 										if (isset($schema[$categoria][$id_attivita][$id_settore])) 
-											echo $schema[$categoria][$id_attivita][$id_settore];
-										
+											$v1=$schema[$categoria][$id_attivita][$id_settore];
+
+										$v2="?";
+										if (isset($schema1[$categoria][$id_attivita][$id_settore])) {
+											$v2=$schema1[$categoria][$id_attivita][$id_settore];
+										}	
+										echo view_value($v1,$v2);
 									  echo "</a>";
 									echo "</td>";
 								}	
@@ -200,6 +259,35 @@
       </div><!-- /.container-fluid -->
     </div>
 
+<?php
+	function view_value($v1,$v2) {
+		$view=null;$color="";
+		if ($v1!="?" && $v2!="?") {
+			$v1=intval($v1);$v2=intval($v2);
+			
+			if ($v1>$v2) {$tipo="success";$arr="arrow-up";$color="green";}
+			if ($v1<$v2) {$tipo="danger";$color="red";$arr="arrow-down";}
+			if ($v1!=$v2) {				
+				$view.="<small class='text-$tipo mr-1'>";
+				$view.="<i class='fas fa-$arr'></i>";
+				
+				if ($v2>0) {
+					$perc=abs(100-(100/$v2)*$v1);
+					$perc=number_format($perc,0);
+					$perc.="%";
+					$view.=" <font color='$color'>$perc</font> ";
+				}
+				$view.="</small> ";
+			} 
+		}
+
+		if ($v1!="?") $view.="<font color='$color'>$v1</font>";
+		if ($v2!="?") $view.=":$v2";
+		
+		return $view;
+	}
+	
+?>
 
 
 <!-- Modal -->
@@ -240,6 +328,6 @@
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.227"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.230"></script>
 	
 @endsection

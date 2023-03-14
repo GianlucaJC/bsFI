@@ -40,10 +40,13 @@ public function __construct()
 	}	
 
 	public function dashboard(Request $request){
-
+		$confr=$request->input("confr");
 		$periodo=$request->input("periodo");
 		$funzionario=$request->input("funzionario");
 		
+		$periodo1=$request->input("periodo1");
+		$funzionario1=$request->input("funzionario1");
+
 		$ref_user=$this->id_user;
 		if ($this->tipouser==1) $ref_user=$funzionario;
 		
@@ -52,22 +55,36 @@ public function __construct()
 		$attivita_index=$this->attivita_index();
 		$categorie=$this->cat_index();
 		$settori=$this->settori();
-		$schema=$this->schema($request);
+		$schema=$this->schema($request,1);
+		$schema1=$this->schema($request,2);
 
-		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('users',$users)->with("schema",$schema)->with('ref_user',$ref_user);
+		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr);
 		
 	}	
 	
-	public function schema($request) {
+	public function schema($request,$tipo) {
+		
 		if (!$request->has("periodo")) return array();
 		
+		
 		//$this->tipouser;
+
 		$periodo=$request->input("periodo");
 		$funzionario=$request->input("funzionario");
+		$periodo1=$request->input("periodo1");
+		$funzionario1=$request->input("funzionario1");
+		if ($tipo==2) {
+			if (strlen($periodo1)==0 && strlen($funzionario1)==0) return array();
+			$periodo=$periodo1;
+		}
 
 		if ($this->tipouser==1 && strlen($funzionario)==0) return array();
 		$ref_user=$this->id_user;
-		if ($this->tipouser==1) $ref_user=$funzionario;
+
+		if ($this->tipouser==1) {
+			if ($tipo==1) $ref_user=$funzionario;
+			if ($tipo==2) $ref_user=$funzionario1;
+		}	
 
 		$resp=array();
 		if (substr($periodo,0,7)=="Globale" || ($ref_user=="all")) {

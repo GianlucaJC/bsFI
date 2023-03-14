@@ -106,3 +106,15 @@ function obj(name,place,rowopen,rowclose) {
 	return info;
 }
 
+function attiva_confr() {
+	if ($("#div_confr").is(":visible")) {
+		$("#periodo1").val('');$("#funzionario1").val('');
+		$("#confr").val("")
+		$("#frm_dash").submit();
+	}
+	else {
+		$("#confr").val("1")
+		$('#div_confr').show(150)
+	}
+}
+
