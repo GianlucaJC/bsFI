@@ -219,6 +219,7 @@
 									  echo "<a href='javascript:void(0)' class='text-muted' $js>";
 										
 										$v1="?";
+										
 										if (isset($schema[$categoria][$id_attivita][$id_settore])) 
 											$v1=$schema[$categoria][$id_attivita][$id_settore];
 

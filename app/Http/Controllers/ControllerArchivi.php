@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\definizione_attivita;
 use App\Models\categorie;
+use App\Models\user;
 
 use DB;
 
@@ -14,6 +15,62 @@ class ControllerArchivi extends Controller
 	{
 		$this->middleware('auth')->except(['index']);
 	}		
+
+	public function definizione_utenti(Request $request){
+
+		$user_abilita=$request->input("user_abilita");
+		$dele_contr=$request->input("dele_contr");
+
+		//assegnazione tipo profilo
+		$edit_elem=0;
+		if ($request->has("edit_elem")) $edit_elem=$request->input("edit_elem");
+		
+		if ($edit_elem!=0) {
+			$profilo_user=$request->input("profilo_user");
+			DB::table("model_has_roles")
+			->where('model_id', $edit_elem)
+			->update(['role_id' => $profilo_user]);
+			
+		}
+		
+		//abilitazione servizio
+		if (strlen($user_abilita)!=0) {
+			$us=DB::table('online.db as db')
+			->select('db.n_tessera','db.pin','db.n_tessera','db.utentefillea')
+			->where('db.id',"=",$user_abilita)
+			->get();
+			if (isset($us[0]->n_tessera)) {
+				$n_us = new user;
+				$n_us->name=$us[0]->utentefillea;
+				$n_us->email=$us[0]->n_tessera;
+				$n_us->password=bcrypt($us[0]->pin);
+				$n_us->save();
+				$new_id=$n_us->id;
+				$rowData['role_id']=3;
+				$rowData['model_type']="App\Models\User";
+				$rowData['model_id']=$new_id;
+				DB::table("model_has_roles")->insert($rowData);				
+			}	
+		}
+		//disabilitazione servizio
+		if (strlen($dele_contr)!=0) {
+			user::where('id', $dele_contr)->delete();
+			$model=DB::table('model_has_roles')
+			->where('model_id',"=",$dele_contr)->delete();
+		}
+		
+		$definizione_utenti=DB::table('online.db as db')
+		->select('db.id','u.id as idu','db.attiva','db.n_tessera','db.utentefillea','r.role_id')
+		->leftjoin('bsfi.users as u','db.n_tessera','u.email')
+		->leftjoin('bsfi.model_has_roles as r','u.id','r.model_id')
+		->where('db.id_prov_associate','=',66)
+		->where('attiva','=',1)
+		->orderBy('db.n_tessera')
+		->get();
+
+		return view('all_views/gestione/definizione_utenti')->with('definizione_utenti', $definizione_utenti);
+	}
+
 	public function definizione_attivita(Request $request){
 		$edit_elem=0;
 		if ($request->has("edit_elem")) $edit_elem=$request->input("edit_elem");

@@ -73,6 +73,13 @@ use App\Models\User;
 				</a>
 				<ul class="nav nav-treeview">
 				  <li class="nav-item">
+					<a href="{{route('definizione_utenti')}}" class="nav-link">
+					  <i class="far fa-circle nav-icon"></i>
+					  <p>Definizione Utenti</p>
+					</a>
+				  </li>
+
+				  <li class="nav-item">
 					<a href="{{route('definizione_attivita')}}" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>Definizione attività</p>
