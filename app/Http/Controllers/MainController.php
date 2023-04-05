@@ -9,6 +9,7 @@ use App\Models\definizione_attivita;
 use App\Models\categorie;
 use App\Models\User;
 use App\Models\schemi;
+use App\Models\documenti;
 use Illuminate\Support\Facades\Auth;
 
 use DB;
@@ -266,6 +267,32 @@ public function __construct()
 		$elenco[12]['dele']=0;
 		return $elenco;
 	}
+	
+	public function documenti(Request $request) {
+		$users=user::select('id','name')->orderBy('name')->get();
+		$utenti=array();
+		foreach ($users as $us) {
+			$utenti[$us->id]=$us->name;
+		}
+		
+		$definizione_attivita=DB::table('definizione_attivita as a')
+		->select('a.id','a.descrizione')->get();
+		
+		$attivita=array();
+		foreach ($definizione_attivita as $at) {
+			$attivita[$at->id]=$at->descrizione;
+		}
+
+		$categorie=$this->cat_index();
+		$settori=$this->settori();		
+		$documenti=DB::table('documenti as d')
+		->select('d.*')
+		->get();
+
+		return view('all_views/gestione/documenti')->with('utenti', $utenti)->with('documenti', $documenti)->with('attivita',$attivita)->with('categorie',$categorie)->with('settori',$settori);
+	}
+
+
 
 
 }
