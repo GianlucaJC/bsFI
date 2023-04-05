@@ -10,6 +10,16 @@
 
 @section('title', 'FirenzeRENDICONTA')
 
+@section('extra_style')  
+ <!-- per upload -->
+  <link href="{{ URL::asset('/') }}dist/css/upload/jquery.dm-uploader.min.css" rel="stylesheet">
+  <!-- per upload -->  
+  <link href="{{ URL::asset('/') }}dist/css/upload/styles.css?ver=1.1" rel="stylesheet">  
+
+<link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" rel="stylesheet">
+
+@endsection
+
 @section('notifiche') 
 
 	@if (1==1)
@@ -205,6 +215,7 @@
 							if (!isset($attivita[$sca]['descrizione'])) continue;
 							
 							$id_attivita=$attivita[$sca]['id_attivita'];
+							
 							$js=" onclick=\"setvalue($ref_user,'$periodo',$categoria,$id_attivita);\"";
 							if (substr($periodo,0,7)=="Globale" || $funzionario=="all") $js="";
 							
@@ -215,8 +226,10 @@
 								echo "</b></td>";
 								
 								foreach($settori as $id_settore=>$v) {
+									$js_view=" onclick=\"view_row($ref_user,'$periodo',$categoria,$id_attivita,$id_settore);\"";
+									
 									echo "<td style='text-align:center'>";
-									  echo "<a href='javascript:void(0)' class='text-muted' $js>";
+									  echo "<a href='javascript:void(0)' class='text-muted' $js_view>";
 										
 										$v1="?";
 										
@@ -292,11 +305,11 @@
 
 
 <!-- Modal -->
-<div class="modal fade bd-example-modal-lg" id="modalvalue" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+<div class="modal fade bd-example-modal-lg" id="modalvalue" tabindex="-1" role="dialog" aria-labelledby="title_doc" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Inserimento/modifica dati</h5>
+        <h5 class="modal-title" id="title_doc">Inserimento dati</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -306,7 +319,7 @@
       </div>
 	  <div id='div_wait' class='mb-3'></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Chiudi</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id='btn_close' onclick='close_doc()'>Chiudi</button>
         <div id='div_save'></div>
       </div>
 	  
@@ -329,6 +342,12 @@
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.230"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.281"></script>
+
+	
+	<!-- per upload -->
+	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.24"></script>
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.368"></script>	
 	
 @endsection

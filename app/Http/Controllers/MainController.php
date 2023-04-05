@@ -169,6 +169,7 @@ public function __construct()
 
 			$resp[$id_cat][$sc]['id_attivita']=$attivita->id;
 			$resp[$id_cat][$sc]['descrizione']=$attivita->descrizione;
+
 			$resp[$id_cat][$sc]['categoria']=$attivita->categoria;
 			$sc++;
 		}

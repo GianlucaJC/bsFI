@@ -40,6 +40,12 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::post('setvalue', [ 'as' => 'setvalue', 'uses' =>'App\Http\Controllers\AjaxController@setvalue']);	
 
 	Route::post('savedata', [ 'as' => 'savedata', 'uses' =>'App\Http\Controllers\AjaxController@savedata']);
+
+	Route::post('update_doc', [ 'as' => 'update_doc', 'uses' =>'App\Http\Controllers\AjaxController@update_doc']);
+
+	Route::post('inforow', [ 'as' => 'inforow', 'uses' =>'App\Http\Controllers\AjaxController@inforow']);
+
+	Route::post('delerow', [ 'as' => 'delerow', 'uses' =>'App\Http\Controllers\AjaxController@delerow']);
 	
 	Route::post('getsettori', [ 'as' => 'getsettori', 'uses' =>'App\Http\Controllers\MainController@getsettori']);	
 });
