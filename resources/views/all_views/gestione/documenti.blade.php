@@ -61,6 +61,7 @@
 							<th>Categoria</th>
 							<th>Attivita</th>
 							<th>Settore</th>
+							<th>Azienda</th>
 							<th>Documento</th>
 						</tr>
 					</thead>
@@ -84,6 +85,10 @@
 									{{ $settori[$documento->id_settore]['settore'] }}
 								</td>	
 								<td>
+									{{ $documento->azienda }}
+								</td>
+
+								<td>
 									<a href="{{$documento->url_completo}}" target='_blank'>
 										{{ $documento->filename }}
 									</a>
@@ -100,6 +105,7 @@
 							<th>Categoria</th>
 							<th>Attivita</th>
 							<th>Settore</th>
+							<th>Azienda</th>
 							<th>Documento</th>
 						</tr>
 					</tfoot>					

@@ -192,6 +192,38 @@ public function __construct()
 		return $cat;
 	}	
 	
+	public function get_settori_aziende() {
+		$settori=$this->settori();
+		$aziende_e=$this->get_aziende_e();
+		$aziende_fissi=$this->get_aziende_fissi();
+		$risp=array();
+		$risp['settori']=$settori;
+		$risp['aziende_e']=$aziende_e;
+		$risp['aziende_fissi']=$aziende_fissi;
+		echo json_encode($risp);
+	}
+
+	public function get_aziende_fissi() {
+		$table="cpnl.iscritti";
+		$elenco = DB::table($table)
+		->select('azienda','partita_iva as id_fiscale')
+		->where('provincia_fo', "=","FI")
+		->groupBy('azienda')
+		->orderBy('azienda')->get();
+		return $elenco;		
+	}
+
+	public function get_aziende_e() {
+		$table="anagrafe.t2_tosc_a";
+		$elenco = DB::table($table)
+		->select('denom as azienda','c2 as id_fiscale')
+		->where('attivi', "=","S")
+		->whereRaw('LENGTH(denom) > ?', [0])
+		->groupBy('azienda')
+		->orderBy('azienda')->get();
+		return $elenco;
+	}
+	
 	public function getsettori() {
 		$settori=$this->settori();
 		echo json_encode($settori);

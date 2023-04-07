@@ -54,6 +54,8 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::post('delerow', [ 'as' => 'delerow', 'uses' =>'App\Http\Controllers\AjaxController@delerow']);
 	
 	Route::post('getsettori', [ 'as' => 'getsettori', 'uses' =>'App\Http\Controllers\MainController@getsettori']);	
+	Route::post('get_settori_aziende', [ 'as' => 'get_settori_aziende', 'uses' =>'App\Http\Controllers\MainController@get_settori_aziende']);	
+
 });
 
 

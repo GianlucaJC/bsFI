@@ -20,6 +20,8 @@ function set_class_allegati() {
   id_categoria=set_class_allegati.id_categoria
   id_attivita=set_class_allegati.id_attivita
   id_settore=set_class_allegati.id_settore
+  azienda=set_class_allegati.azienda
+
 
   base_path = $("#url").val();
 
@@ -87,12 +89,14 @@ function set_class_allegati() {
       ui_multi_update_file_progress(id, 100, 'success', false);
 	  
 	  $("#btn_save").removeAttr("disabled");
+	  $('#div_main_value *').prop('disabled',true);
 	  saveinfo.filename=data.filename
 	  saveinfo.ref_user=ref_user
 	  saveinfo.periodo=periodo
 	  saveinfo.id_categoria=id_categoria
 	  saveinfo.id_attivita=id_attivita
 	  saveinfo.id_settore=id_settore
+	  saveinfo.azienda=azienda
 	 
 	 
     },
@@ -116,6 +120,7 @@ function saveinfo() {
 		console.log("false");
 		return false
 	}	
+
 	$("#btn_save").prop("disabled",true);
 	base_path = $("#url").val();
 	let CSRF_TOKEN = $("#token_csrf").val();
@@ -131,7 +136,7 @@ function saveinfo() {
 			headers: {
 			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 			},
-			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&filename='+saveinfo.filename
+			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&azienda='+saveinfo.azienda+'&filename='+saveinfo.filename
 		})
 		.then(response => {
 			if (response.ok) {

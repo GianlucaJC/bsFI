@@ -76,6 +76,7 @@ function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore) {
 								html+="<thead>";
 									html+="<tr>";
 										html+="<th>Elimina</th>";
+										html+="<th>Azienda</th>";
 										html+="<th>Documento</th>";
 										html+="<th>Inviato il</th>";
 									html+="</tr>";
@@ -85,6 +86,10 @@ function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore) {
 									html+="<tr id='tr_doc"+item.id+"'>";
 										html+="<td> <span id='dele_doc"+item.id+"'></span>";
 											html+="<button type='button' class='btn btn-warning btn-sm' onclick='delerow("+item.id+")'>Elimina</button>";
+										html+="</td>";
+										html+="<td>";
+											if (item.azienda)
+												html+=item.azienda
 										html+="</td>";
 										html+="<td>"
 										html+="<a href='"+item.url_completo+"' target='_blank'>";
@@ -131,39 +136,32 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 		let CSRF_TOKEN = $("#token_csrf").val();
 		$.ajax({
 			type: 'POST',
-			url: base_path+"/getsettori",
+			url: base_path+"/get_settori_aziende",
 			data: {_token: CSRF_TOKEN,ref_user:ref_user,periodo:periodo,id_categoria:id_categoria,id_attivita:id_attivita},
-			success: function (settori) {
+			success: function (risposta) {
 				$.ajax({
 					type: 'POST',
 					url: base_path+"/setvalue",
 					data: {_token: CSRF_TOKEN,ref_user:ref_user,periodo:periodo,id_categoria:id_categoria,id_attivita:id_attivita},
-					success: function (data) {		
-						html="<div class='container-fluid' id='div_main_value'>";
-							
-						html+="<div class='form-floating mb-3 mb-md-0'>";
+					success: function (data) {
 						
-						html+="<select class='form-select' id='list_settori' aria-label='list_settori' name='list_settori' onchange='step2(this.value)'>";
-						html+="<option value=''>Select...</option>";		
-						$.each(JSON.parse(settori), function (i, item) {
-
-							html+="<option value='"+i+"'>"+item.settore+"</option>";		
-						})	
+						console.log(risposta)
+						risp=$.parseJSON( risposta)
 						
-						html+="</select>";
-						html+="<label for='list_settori'>Scelta del Settore per inserimento dati</label>";
+						view_form.settori=risp.settori
+						view_form.aziende_e=risp.aziende_e
+						view_form.aziende_fissi=risp.aziende_fissi
 						
-						html+="</div>";
-						
-						html+="<div id='div_step2'></div>";
-						html+="<div id='div_step3' class='mt-2'></div>";
+						html=view_form()
 						
 						$("#bodyvalue").html(html)
+						/*
 						$(".campi").empty();
 						$.each(JSON.parse(data), function (i, item){
 							ref_campo="sett"+i
 							$("#"+ref_campo).val(item)
-						})			
+						})
+						*/
 						
 						step2.ref_user=ref_user
 						step2.periodo=periodo
@@ -184,15 +182,135 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 	
 }
 
+function imposta_a(value) {
+	testo="";
+	if (value=="1") {
+		if ($("#list_aziende_e").val().length>0) 
+			testo=$('#list_aziende_e option:selected').text();  
+		else 
+			testo="";
+		$("#list_aziende_fissi").val('')
+	}	
+	if (value=="2") {
+		if ($("#list_aziende_fissi").val().length>0) 
+			testo=$('#list_aziende_fissi option:selected').text();  
+		else
+			testo=""
+		$("#list_aziende_e").val('')
+	}	
+	$("#azienda").val(testo)
+	step2(0)
+	
+}
+function view_form() {
+	settori=view_form.settori
+	aziende_e=view_form.aziende_e
+	aziende_fissi=view_form.aziende_fissi
+	
+	html="<div class='container-fluid' id='div_main_value'>";
+	html+="<div class='row mb-2'>";
+		html+="<div class='col-sm-12'>";
+			html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-select' id='list_settori' aria-label='list_settori' name='list_settori' onchange='step2(0)'>";
+					html+="<option value=''>Select...</option>";		
+					$.each(settori, function (i, item) {
 
+						html+="<option value='"+i+"'>"+item.settore+"</option>";		
+					})	
+				
+				html+="</select>";
+				html+="<label for='list_settori'>Settore</label>";
+			html+="</div>";
+		html+="</div>";
+	html+="</div>";	
+	html+="<div class='row mb-2'>";	
+		html+="<div class='col-sm-4'>";
+			html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-select aziende' id='list_aziende_e' aria-label='list_aziende_e' name='list_aziende_e' onchange='imposta_a(1)'>";
+					html+="<option value=''>Select...</option>";		
+					$.each(aziende_e, function (i, item) {
 
+						html+="<option value='"+item.id_fiscale+"'>"+item.azienda+"</option>";		
+					})	
+				
+				html+="</select>";
+				html+="<label for='list_aziende_e'>Azienda Edile</label>";
+			html+="</div>";
+		html+="</div>";
+		
+		html+="<div class='col-sm-4'>";
+			html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-select aziende' id='list_aziende_fissi' aria-label='list_aziende_fissi' name='list_aziende_fissi' onchange='imposta_a(2)'>";
+					html+="<option value=''>Select...</option>";		
+					$.each(aziende_fissi, function (i, item) {
+
+						html+="<option value='"+item.id_fiscale+"'>"+item.azienda+"</option>";		
+					})	
+				
+				html+="</select>";
+				html+="<label for='list_aziende_fissi'>Azienda Imp.Fissi</label>";
+			html+="</div>";
+		html+="</div>";	
+		
+		
+		html+="<div class='col-sm-4'>";
+			html+="<div class='form-check form-switch ml-3 mt-2'>";
+			  html+="<input class='form-check-input' type='checkbox' id='set_azi' onchange='set_view_azienda()'>";
+			  html+="<label class='form-check-label' for='set_azi'>Definizione manuale azienda</label>";
+			html+="</div>";
+		html+="</div>";
+		
+		
+	html+="</div>";	
+	
+	html+="<div class='row mb-2' style='display:none' id='div_custom_azienda'>";
+		html+="<div class='col-sm-12'>";
+			html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<input class='form-control' id='azienda_def' name='azienda_def' type='text' placeholder='Definizione azienda' maxlength=70 onkeyup=\"$('#azienda').val(this.value)\"/>";
+				html+="<label for='azienda'>Azienda</label>";
+			html+="</div>";	
+		html+="</div>";	
+	html+="</div>";	
+	html+="<input type='hidden' name='azienda' id='azienda'>";
+	
+	html+="<a href='javascript:void(0)' onclick='step2(1)' class='link-primary'>Definizione allegato</a>";
+	
+	
+	html+="<div id='div_step2' class='mt-3'></div>";
+	html+="<div id='div_step3' class='mt-2'></div>";
+	return html	
+	
+}
+function set_view_azienda() {
+	if ($('#set_azi').is(':checked')) { 
+		$(".aziende").val('');
+		$( ".aziende" ).prop( "disabled", true );
+		$("#azienda_def").prop( "disabled", false );
+		$("#div_custom_azienda").show(100)
+		document.getElementById("azienda_def").focus();
+	}
+	else {
+		$("#azienda_def").val('');
+		$( ".aziende" ).prop( "disabled", false );
+		$("#azienda_def").prop( "disabled", true );
+		$("#div_custom_azienda").hide(100)
+	}
+	$("#azienda").val('')
+	$("#div_step2").empty();
+	
+}
 
 function step2(value) {
-	if (value.length==0) {
+	azienda=$("#azienda").val()
+	id_settore=$("#list_settori").val();
+	
+	if (id_settore.length==0 || azienda.length==0) {
 		$("#div_step2").empty();
+		$("#btn_save").prop("disabled",true);
+		if (value=="1") alert("Definire correttamente i dati richiesti!");
 		return false
 	}
-	console.log("value",value)
+
 	
 	html="<center><div class='spinner-border text-secondary' role='status'></div></center>";
 
@@ -222,7 +340,8 @@ function step2(value) {
 		set_class_allegati.periodo=step2.periodo
 		set_class_allegati.id_categoria=step2.id_categoria
 		set_class_allegati.id_attivita=step2.id_attivita
-		set_class_allegati.id_settore=value
+		set_class_allegati.id_settore=id_settore
+		set_class_allegati.azienda=azienda
 		set_class_allegati(); 
 	})
 	.catch(status, err => {
