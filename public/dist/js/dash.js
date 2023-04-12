@@ -93,7 +93,10 @@ function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore) {
 										html+="</td>";
 										html+="<td>"
 										html+="<a href='"+item.url_completo+"' target='_blank'>";
-											html+=item.filename
+											if (item.file_user.length>0)
+												html+=item.file_user
+											else
+												html+=item.filename
 										html+="</a>";
 										html+="<td>";
 											html+=item.periodo_data
@@ -305,6 +308,7 @@ function view_form() {
 }
 
 function step2(value) {
+	
 	azienda=$("#azienda").val()
 	id_settore=$("#list_settori").val();
 	
@@ -338,6 +342,7 @@ function step2(value) {
 		//$("#div_sezione"+sezione).html(resp);
 		
 		$("#div_step2").html(resp);
+		file_user=$("#file_user").val()
 		//function set_class_allegati() in demo-config.js
 		set_class_allegati.from="allegati"
 		set_class_allegati.ref_user=step2.ref_user
@@ -346,6 +351,7 @@ function step2(value) {
 		set_class_allegati.id_attivita=step2.id_attivita
 		set_class_allegati.id_settore=id_settore
 		set_class_allegati.azienda=azienda
+		set_class_allegati.file_user=file_user
 		set_class_allegati(); 
 	})
 	.catch(status, err => {

@@ -54,6 +54,7 @@ class AjaxController extends Controller
 		$id_settore=$request->input("id_settore");
 		$azienda=$request->input("azienda");
 		$filename=$request->input("filename");
+		$file_user=$request->input("file_user");
 		$url_completo="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore/$filename";
 
 		
@@ -66,8 +67,10 @@ class AjaxController extends Controller
 		$documenti->id_attivita=$id_attivita;
 		$documenti->id_settore=$id_settore;
 		$documenti->filename=$filename;
+		$documenti->file_user=$file_user;
 		$documenti->azienda=$azienda;
 		$documenti->url_completo=$url_completo;
+		
 
 		$documenti->save();
 		
@@ -145,7 +148,7 @@ class AjaxController extends Controller
 		$id_settore=$request->input("id_settore");
 
 		$inforow = DB::table("documenti")
-		->select("id",DB::raw("DATE_FORMAT(documenti.periodo_data,'%d-%m-%Y') as periodo_data"),'filename','url_completo','azienda')
+		->select("id",DB::raw("DATE_FORMAT(documenti.periodo_data,'%d-%m-%Y') as periodo_data"),'filename','file_user','url_completo','azienda')
 		->where('id_funzionario', "=",$ref_user)
 		->where('periodo', "=",$periodo)
 		->where('id_categoria', "=",$id_categoria)

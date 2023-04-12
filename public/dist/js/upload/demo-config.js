@@ -15,6 +15,7 @@ function set_class_allegati() {
    */
   	
   from=set_class_allegati.from
+  file_user=set_class_allegati.file_user
   ref_user=set_class_allegati.ref_user
   periodo=set_class_allegati.periodo
   id_categoria=set_class_allegati.id_categoria
@@ -90,7 +91,9 @@ function set_class_allegati() {
 	  
 	  $("#btn_save").removeAttr("disabled");
 	  $('#div_main_value *').prop('disabled',true);
+	  $("#file_user").removeAttr("disabled");
 	  saveinfo.filename=data.filename
+	  saveinfo.file_user=file_user
 	  saveinfo.ref_user=ref_user
 	  saveinfo.periodo=periodo
 	  saveinfo.id_categoria=id_categoria
@@ -120,6 +123,11 @@ function saveinfo() {
 		console.log("false");
 		return false
 	}	
+	file_user=$("#file_user").val()
+	if (file_user.length==0) {
+		alert("Definire un nome per l'allegato da inviare al server!");
+		return false
+	}
 
 	$("#btn_save").prop("disabled",true);
 	base_path = $("#url").val();
@@ -136,7 +144,7 @@ function saveinfo() {
 			headers: {
 			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 			},
-			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&azienda='+saveinfo.azienda+'&filename='+saveinfo.filename
+			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&azienda='+saveinfo.azienda+'&filename='+saveinfo.filename+"&file_user="+file_user
 		})
 		.then(response => {
 			if (response.ok) {

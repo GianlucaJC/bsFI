@@ -94,7 +94,11 @@
 
 								<td>
 									<a href="{{$documento->url_completo}}" target='_blank'>
-										{{ $documento->filename }}
+										@if (strlen($documento->file_user)==0)
+											{{ $documento->filename }}	
+										@else
+											{{ $documento->file_user }}
+										@endif
 									</a>
 								</td>	
 

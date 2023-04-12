@@ -359,12 +359,12 @@
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.347"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.354"></script>
 
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
 	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.24"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.371"></script>	
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.377"></script>	
 	
 @endsection
