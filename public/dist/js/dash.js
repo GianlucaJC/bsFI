@@ -151,6 +151,7 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 						view_form.settori=risp.settori
 						view_form.aziende_e=risp.aziende_e
 						view_form.aziende_fissi=risp.aziende_fissi
+						view_form.aziende_custom=risp.aziende_custom
 						
 						html=view_form()
 						
@@ -169,7 +170,7 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 						step2.id_attivita=id_attivita
 					
 						html="<button id='btn_save' disabled type='button' class='btn btn-primary' onclick='saveinfo()'>Salva</button>";
-						
+						//saveinfo() in demo-config.js
 
 						
 						$("#div_save").html(html);
@@ -190,6 +191,7 @@ function imposta_a(value) {
 		else 
 			testo="";
 		$("#list_aziende_fissi").val('')
+		$("#list_aziende_custom").val('')
 	}	
 	if (value=="2") {
 		if ($("#list_aziende_fissi").val().length>0) 
@@ -197,7 +199,17 @@ function imposta_a(value) {
 		else
 			testo=""
 		$("#list_aziende_e").val('')
+		$("#list_aziende_custom").val('')
 	}	
+	if (value=="3") {
+		if ($("#list_aziende_custom").val().length>0) 
+			testo=$('#list_aziende_custom option:selected').text();  
+		else
+			testo=""
+		$("#list_aziende_e").val('')
+		$("#list_aziende_fissi").val('')
+	}	
+	testo=testo.trim()
 	$("#azienda").val(testo)
 	step2(0)
 	
@@ -206,6 +218,7 @@ function view_form() {
 	settori=view_form.settori
 	aziende_e=view_form.aziende_e
 	aziende_fissi=view_form.aziende_fissi
+	aziende_custom=view_form.aziende_custom
 	
 	html="<div class='container-fluid' id='div_main_value'>";
 	html+="<div class='row mb-2'>";
@@ -252,13 +265,21 @@ function view_form() {
 			html+="</div>";
 		html+="</div>";	
 		
-		
 		html+="<div class='col-sm-4'>";
-			html+="<div class='form-check form-switch ml-3 mt-2'>";
-			  html+="<input class='form-check-input' type='checkbox' id='set_azi' onchange='set_view_azienda()'>";
-			  html+="<label class='form-check-label' for='set_azi'>Definizione manuale azienda</label>";
+			html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-select aziende' id='list_aziende_custom' aria-label='list_aziende_custom' name='list_aziende_custom' onchange='imposta_a(3)'>";
+					html+="<option value=''>Select...</option>";		
+					$.each(aziende_custom, function (i, item) {
+
+						html+="<option value='"+item.id+"'>"+item.azienda+"</option>";		
+					})	
+				
+				html+="</select>";
+				html+="<label for='list_aziende_custom'>Azienda definita</label>";
 			html+="</div>";
-		html+="</div>";
+		html+="</div>";			
+		
+
 		
 		
 	html+="</div>";	
@@ -272,6 +293,7 @@ function view_form() {
 		html+="</div>";	
 	html+="</div>";	
 	html+="<input type='hidden' name='azienda' id='azienda'>";
+
 	
 	html+="<a href='javascript:void(0)' onclick='step2(1)' class='link-primary'>Definizione allegato</a>";
 	
@@ -279,24 +301,6 @@ function view_form() {
 	html+="<div id='div_step2' class='mt-3'></div>";
 	html+="<div id='div_step3' class='mt-2'></div>";
 	return html	
-	
-}
-function set_view_azienda() {
-	if ($('#set_azi').is(':checked')) { 
-		$(".aziende").val('');
-		$( ".aziende" ).prop( "disabled", true );
-		$("#azienda_def").prop( "disabled", false );
-		$("#div_custom_azienda").show(100)
-		document.getElementById("azienda_def").focus();
-	}
-	else {
-		$("#azienda_def").val('');
-		$( ".aziende" ).prop( "disabled", false );
-		$("#azienda_def").prop( "disabled", true );
-		$("#div_custom_azienda").hide(100)
-	}
-	$("#azienda").val('')
-	$("#div_step2").empty();
 	
 }
 

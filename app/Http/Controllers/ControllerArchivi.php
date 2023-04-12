@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\mainController;
 use Illuminate\Http\Request;
 use App\Models\definizione_attivita;
 use App\Models\categorie;
+use App\Models\aziende_custom;
 use App\Models\user;
 
 use DB;
@@ -15,6 +16,54 @@ class ControllerArchivi extends Controller
 	{
 		$this->middleware('auth')->except(['index']);
 	}		
+
+	public function aziende(Request $request) {
+		$dele_azienda=$request->input("dele_azienda");
+		$msg_err="";
+		if (strlen($dele_azienda)>0) {
+			$az_dele=$request->input("az_dele");
+			$table="assegnazioni";
+			$count = DB::table($table)
+			->where('azienda',"=",$az_dele)
+			->count();
+			$dele=false;
+			if ($count==0) {
+				$table="documenti";
+				$count = DB::table($table)
+				->where('azienda',"=",$az_dele)
+				->count();
+				if ($count==0) {
+					$dele=true;
+					aziende_custom::where('id', $dele_azienda)->delete();
+				}	
+			}
+			if ($dele==false)
+				$msg_err="<b>Attenzione!</b><hr><i>L'azienda risulta movimentata nei documenti o nelle assegnazioni e non può essere cancellata. (Eventualmente consultare il SuperAdministror)</i>";
+			
+		}
+		$azienda_def=$request->input("azienda_def");
+		if (strlen($azienda_def)!=0) {
+			$table="aziende_custom";
+			$count = DB::table($table)
+			->where('azienda',"=",$azienda_def)
+			->count();	
+			if ($count>0)	
+				$msg_err="<b>Attenzione!</b><hr><i>L'azienda risulta già inserita tramite questa procedura!</i>";
+			else {
+				$azienda_def=strtoupper($azienda_def);
+				$azienda = new aziende_custom;
+				$azienda->dele=0;
+				$azienda->azienda=$azienda_def;
+				$azienda->save();
+			}	
+				
+		}
+		$aziende_e = (new mainController)->get_aziende_e();
+		$aziende_fissi = (new mainController)->get_aziende_fissi();
+		$aziende_custom = (new mainController)->get_aziende_custom();
+
+		return view('all_views/gestione/aziende')->with('aziende_e',$aziende_e)->with('aziende_fissi',$aziende_fissi)->with('aziende_custom',$aziende_custom)->with('msg_err',$msg_err);
+	}
 
 	public function definizione_utenti(Request $request){
 

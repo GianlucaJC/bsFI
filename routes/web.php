@@ -19,11 +19,25 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::get('dashboard', [ 'as' => 'dashboard', 'uses' => 'App\Http\Controllers\MainController@dashboard']);
 	Route::post('dashboard', [ 'as' => 'dashboard', 'uses' => 'App\Http\Controllers\MainController@dashboard']);
 
-	Route::get('documenti', [ 'as' => 'documenti', 'uses' => 'App\Http\Controllers\MainController@documenti'])
-	->middleware(['role:admin']);
+	Route::get('documenti', [ 'as' => 'documenti', 'uses' => 'App\Http\Controllers\MainController@documenti']);
 
 	Route::post('documenti', [ 'as' => 'documenti', 'uses' => 'App\Http\Controllers\MainController@documenti'])
 	->middleware(['role:admin']);
+
+
+	Route::get('assegnazioni', [ 'as' => 'assegnazioni', 'uses' => 'App\Http\Controllers\MainController@assegnazioni'])
+	->middleware(['role:admin']);
+
+	Route::post('assegnazioni', [ 'as' => 'assegnazioni', 'uses' => 'App\Http\Controllers\MainController@assegnazioni'])
+	->middleware(['role:admin']);
+
+
+	Route::get('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende'])
+	->middleware(['role:admin']);
+	
+	Route::post('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende'])
+	->middleware(['role:admin']);
+
 
 	Route::get('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita'])
 	->middleware(['role:admin']);

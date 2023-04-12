@@ -10,6 +10,9 @@ use App\Models\categorie;
 use App\Models\User;
 use App\Models\schemi;
 use App\Models\documenti;
+use App\Models\aziende_custom;
+use App\Models\assegnazioni;
+use App\Models\notifiche;
 use Illuminate\Support\Facades\Auth;
 
 use DB;
@@ -49,8 +52,22 @@ public function __construct()
 		$funzionario1=$request->input("funzionario1");
 
 		$ref_user=$this->id_user;
+		$num_noti=0;
+
+
+
 		if ($this->tipouser==1) $ref_user=$funzionario;
-		
+
+		if (strlen($ref_user)>0) {
+			$notifiche=notifiche::select('notifiche')
+			->where("id_user","=",$ref_user)
+			->get();
+			if (isset($notifiche[0])) {
+				$num_noti=$notifiche[0]->notifiche;
+			}	
+		}
+
+
 		$users=user::select('id','name')->orderBy('name')->get();
 		$periodi=$this->periodi();
 		$attivita_index=$this->attivita_index();
@@ -59,7 +76,7 @@ public function __construct()
 		$schema=$this->schema($request,1);
 		$schema1=$this->schema($request,2);
 
-		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr);
+		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti);
 		
 	}	
 	
@@ -196,13 +213,22 @@ public function __construct()
 		$settori=$this->settori();
 		$aziende_e=$this->get_aziende_e();
 		$aziende_fissi=$this->get_aziende_fissi();
+		$aziende_custom=$this->get_aziende_custom();
 		$risp=array();
 		$risp['settori']=$settori;
 		$risp['aziende_e']=$aziende_e;
 		$risp['aziende_fissi']=$aziende_fissi;
+		$risp['aziende_custom']=$aziende_custom;
 		echo json_encode($risp);
 	}
 
+	public function get_aziende_custom() {
+		$table="aziende_custom";
+		$elenco = DB::table($table)
+		->select('azienda','id')
+		->orderBy('azienda')->get();
+		return $elenco;		
+	}
 	public function get_aziende_fissi() {
 		$table="cpnl.iscritti";
 		$elenco = DB::table($table)
@@ -223,6 +249,8 @@ public function __construct()
 		->orderBy('azienda')->get();
 		return $elenco;
 	}
+	
+
 	
 	public function getsettori() {
 		$settori=$this->settori();
@@ -302,6 +330,11 @@ public function __construct()
 	
 	public function documenti(Request $request) {
 		$users=user::select('id','name')->orderBy('name')->get();
+		
+		//azzeramento notifiche 
+			notifiche::where("id_user","=",$this->id_user)
+			->update(['notifiche' =>0]);
+		//
 		$utenti=array();
 		foreach ($users as $us) {
 			$utenti[$us->id]=$us->name;
@@ -314,17 +347,88 @@ public function __construct()
 		foreach ($definizione_attivita as $at) {
 			$attivita[$at->id]=$at->descrizione;
 		}
-
+		
 		$categorie=$this->cat_index();
 		$settori=$this->settori();		
-		$documenti=DB::table('documenti as d')
-		->select('d.*')
-		->get();
+		
+		if ($this->tipouser==1) {
+			$documenti=DB::table('documenti as d')
+			->select('d.*')
+			->orderBy("created_at","desc")
+			->get();
+		} else {
+			$aziende=assegnazioni::select("azienda")
+			->where("id_user","=",$this->id_user)
+			->get();
+			
+			$documenti = documenti::select("*")
+			->where(function($query) use($aziende){
+				foreach ($aziende as $azienda) {
+					$query->orWhere("azienda", '=', $azienda->azienda);
+				}
+			})->orWhere("id_funzionario", '=', $this->id_user)
+			->orderBy("created_at","desc")->get();
+			
+		}
+		
 
 		return view('all_views/gestione/documenti')->with('utenti', $utenti)->with('documenti', $documenti)->with('attivita',$attivita)->with('categorie',$categorie)->with('settori',$settori);
 	}
+	
 
 
+	public function assegnazioni(Request $request) {
+		$utenti=user::select('id','name')->orderBy('name')->get();
+
+		//nuova azienda da associare
+		$azienda=$request->input("azienda");
+		$user_ass=$request->input("user_ass");
+		$msg_err="";
+		if (strlen($azienda)!=0 && strlen($user_ass)!=0) {
+			$count=DB::table('assegnazioni as a')
+			->select('a.id')
+			->where('a.azienda', "=",$azienda)
+			->count();
+			if ($count==0) {
+				$assegnazioni = new assegnazioni;
+				$assegnazioni->dele=0;
+				$assegnazioni->id_user=$user_ass;
+				$assegnazioni->azienda=$azienda;
+				$assegnazioni->save();
+			} else $msg_err="<b>Attenzione!</b><hr><i>L'azienda <b>$azienda</b> risulta già associata!</i>";
+		}
+		//
+
+
+		//cancellazione azienda associata
+		if ($request->has("az_dele")) {
+			if ($request->input("idus_dele")!=null && $request->input("az_dele")!=null) {
+				$az_dele=$request->input("az_dele");
+				$idus_dele=$request->input("idus_dele");
+				$assegnazioni=DB::table('assegnazioni')
+				->where('azienda',"=",$az_dele)
+				->where('id_user',"=",$idus_dele)
+				->delete();
+
+			}
+		}	
+		//
+		
+		$assegnazioni=DB::table('assegnazioni as a')
+		->select('a.*')
+		->orderBy('a.id_user')
+		->orderBy('a.azienda')
+		->get();
+		$user_az=array();
+		foreach($assegnazioni as $assegnazione) {
+			$id_user=$assegnazione->id_user;
+			$user_az[$id_user][]=$assegnazione->azienda;
+		}
+		$aziende_e=$this->get_aziende_e();
+		$aziende_fissi=$this->get_aziende_fissi();	
+
+		return view('all_views/gestione/assegnazioni')->with('utenti', $utenti)->with('assegnazioni',$assegnazioni)->with('user_az',$user_az)->with('aziende_e',$aziende_e)->with('aziende_fissi',$aziende_fissi)->with('msg_err',$msg_err);
+	}
 
 
 }

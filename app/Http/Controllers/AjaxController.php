@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\schemi;
 use App\Models\documenti;
+use App\Models\notifiche;
+use App\Models\assegnazioni;
 use DB;
 
 
@@ -54,6 +56,7 @@ class AjaxController extends Controller
 		$filename=$request->input("filename");
 		$url_completo="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore/$filename";
 
+		
 		$documenti = new documenti;
 		$documenti->dele=0;
 		$documenti->periodo_data=date("Y-m-d");
@@ -95,7 +98,36 @@ class AjaxController extends Controller
 		else
 			$schemi->increment('valore');
 		$schemi->save();		
-		
+			
+		////sistema notifiche	
+		$id_log=Auth::user()->id;	
+		$assegnazioni = DB::table("assegnazioni")
+		->select('id_user')
+		->where('azienda', "=",$azienda)
+		->get();
+		if (isset($assegnazioni[0])) {
+			$id_not=$assegnazioni[0]->id_user;
+			if ($id_not!=$id_log) {
+				$count = DB::table("notifiche")
+				->where('id_user', "=",$id_not)
+				->count();
+				if ($count==0) {
+					$noti = new notifiche;
+					$noti->notifiche=1;
+				}
+				else {
+					$notifiche = DB::table("notifiche")
+					->where('id_user', "=",$id_not)
+					->get();				
+					$id=$notifiche[0]->id;
+					$noti = notifiche::find($id);
+					$noti->increment('notifiche');
+				}
+				$noti->id_user=$id_not;
+				$noti->save();
+			}			
+			
+		}
 		
 		$risp=array();
 

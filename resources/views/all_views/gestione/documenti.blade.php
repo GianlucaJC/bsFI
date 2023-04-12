@@ -56,6 +56,7 @@
 				<table id='tbl_list_doc' class="display">
 					<thead>
 						<tr>
+							<th>Data ora</th>
 							<th>Utente</th>
 							<th>Periodo</th>
 							<th>Categoria</th>
@@ -69,6 +70,9 @@
 
 						@foreach($documenti as $documento)
 							<tr>
+								<td>
+									{{ $documento->created_at}}
+								</td>
 								<td>
 									{{ $utenti[$documento->id_funzionario] }}
 								</td>
@@ -100,6 +104,7 @@
 					</tbody>
 					<tfoot>
 						<tr>
+							<th>Data ora</th>
 							<th>Utente</th>
 							<th>Periodo</th>
 							<th>Categoria</th>
@@ -151,6 +156,6 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti.js?ver=1.47"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti.js?ver=1.48"></script>
 
 @endsection

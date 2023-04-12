@@ -35,43 +35,18 @@ use App\Models\User;
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
-			<?php if (1==2) {?>
-			 <li class="nav-item menu">
-				<a href="#" class="nav-link">
-				  <i class="nav-icon fas fa-cube"></i>
-				  <p>Candidature
-					<i class="right fas fa-angle-left"></i>
-				  </p>
-				</a>
-				<ul class="nav nav-treeview">
-				  <li class="nav-item">
-					<a href="" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Nuova candidatura</p>
-					</a>
-				  </li>
-				  <li class="nav-item">
-					<a href="" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Lista candidature</p>
-					</a>
-				  </li>
-
-				</ul>
-			  </li>
-			<?php } ?>
-
 		
 			@if ($user->hasRole('admin'))
-			  <li class="nav-item menu">
-				<a href="#" class="nav-link">
-				  <i class="fas fa-cogs"></i> 
-				  <p>
-					Archivi Servizi
-					<i class="right fas fa-angle-left"></i>
-				  </p>
-				</a>
-				<ul class="nav nav-treeview">
+			  
+				 <li class="nav-item">
+					  <li class="nav-item">
+						<a href="{{route('dashboard')}}" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>Homepage-Dashboard</p>
+						</a>
+					  </li>
+				  </li>	
+		  
 				  <li class="nav-item">
 					<a href="{{route('definizione_utenti')}}" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
@@ -85,12 +60,29 @@ use App\Models\User;
 					  <p>Definizione attività</p>
 					</a>
 				  </li>
-				</ul>  
-			   </li>	
-			   
-			
-			
+				  
+				  <li class="nav-item">
+					  <li class="nav-item">
+						<a href="{{route('aziende')}}" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>Gestione Aziende</p>
+						</a>
+					  </li>
+				  </li>
+				  
 
+			  <li class="nav-item">
+				  <li class="nav-item">
+					<a href="{{route('assegnazioni')}}" class="nav-link">
+					  <i class="far fa-circle nav-icon"></i>
+					  <p>Assegnazioni</p>
+					</a>
+				  </li>
+			  </li>
+
+
+			@endif 
+          
 			  <li class="nav-item">
 				  <li class="nav-item">
 					<a href="{{route('documenti')}}" class="nav-link">
@@ -99,8 +91,7 @@ use App\Models\User;
 					</a>
 				  </li>
 			  </li>
-			@endif 
-          
+
 
 	  
 		  <li class="nav-item">

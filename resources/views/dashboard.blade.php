@@ -80,6 +80,23 @@
 	
      
 	 <div class="container-fluid">
+
+	@if($num_noti>0)
+		<div class="alert alert-warning" role="alert">
+			<b>Attenzione</b><hr>
+			Hai <b>{{$num_noti}}</b>
+			@if ($num_noti==1) 
+				nuovo documento inserito da altri riferito ad un'azienda a te associata.
+			@else
+				nuovi documenti inseriti da altri riferiti ad una o più aziende a te associate.
+			@endif
+			<br>
+			<a href="{{route('documenti')}}"  class="link-primary">
+				Clicca quì per accedere all'area documenti
+			</a>	
+		</div>
+	@endif	
+	 
 	 <button type="button" onclick="attiva_confr()" class="btn btn-primary mb-3">Attiva/Disattiva Confronto</button>
 		<div class="row mb-3">
 			<div class="col-md-6">
@@ -342,7 +359,7 @@
 	<!-- AdminLTE App -->
 	<script src="dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.341"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.347"></script>
 
 	
 	<!-- per upload -->
