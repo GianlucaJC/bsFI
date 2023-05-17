@@ -134,7 +134,11 @@ foreach($assegnazioni as $assegnazione) {
 				@foreach($utenti as $info)	
 					<a href="#" class="nav-link p-1" onclick="$('#oper_sel').val({{$info->id}});$('#div_az{{$num}}').show();this.closest('form').submit()">
 					  <i class="far fa-circle nav-icon"></i>
-					  {{$info->name}}
+						<?php if (isset($oper_sel) && $oper_sel==$info->id)
+							echo "<b><font color='orange'>".$info->name."</font></b>";
+						else
+							echo $info->name;
+						?>
 					</a>
 					<?php 
 					
