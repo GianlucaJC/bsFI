@@ -101,7 +101,7 @@
 		<div class="row mb-3">
 			<div class="col-md-6">
 				<div class="form-floating mb-3 mb-md-0">
-					<select class="form-select" id="periodo" aria-label="Periodo" name='periodo' onchange="$('#frm_dash').submit();" placeholder="Periodo" >
+					<select class="form-select" id="periodo" aria-label="Periodo" name='periodo' onchange="$('#per_sel').val(this.value);$('#frm_dash').submit();" placeholder="Periodo" >
 						<option value=''>Select...</option>
 						<?php
 							foreach ($periodi as $id_per=>$per) {
@@ -114,10 +114,12 @@
 					<label for="periodo">Periodo</label>
 				</div>
 			</div>
+			<input type='hidden' name='azienda' id='azienda' value='{{$azienda}}'>
 			@if ($user->hasRole('admin'))
+				
 				<div class="col-md-6">
 					<div class="form-floating mb-3 mb-md-0">
-						<select class="form-select" id="funzionario" aria-label="Funzionario" name='funzionario' onchange="$('#frm_dash').submit();" placeholder="Funzionario">
+						<select class="form-select" id="funzionario" aria-label="Funzionario" name='funzionario' onchange="$('#azienda').val('');$('#frm_dash').submit();" placeholder="Funzionario">
 							<option value=''>Select...</option>
 							<option value='all'
 								@if ($funzionario=="all") 
@@ -353,11 +355,11 @@
  
 @section('content_plugin')
 	<!-- jQuery -->
-	<script src="plugins/jquery/jquery.min.js"></script>
+	<script src="{{ URL::asset('/') }}plugins/jquery/jquery.min.js"></script>
 	<!-- Bootstrap 4 -->
-	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+	<script src="{{ URL::asset('/') }}plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- AdminLTE App -->
-	<script src="dist/js/adminlte.min.js"></script>
+	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
 	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.354"></script>
 

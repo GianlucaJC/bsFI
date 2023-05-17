@@ -43,11 +43,38 @@ public function __construct()
 		
 	}	
 
-	public function dashboard(Request $request){
+	public function dashboard(){
+		$request=request();
+		
+		
 		$confr=$request->input("confr");
 		$periodo=$request->input("periodo");
-		$funzionario=$request->input("funzionario");
+		$per_sel="";
+		if ($request->has("per_sel")) {
+			$per_sel=$request->input("per_sel"); //in sidemenu
+			if (!$request->has("periodo")) $periodo=$per_sel;
+		}
+		if ($request->has("periodo")) $per_sel=$periodo;
 		
+		$funzionario=$request->input("funzionario"); //in dashboard
+		$oper_sel=0;
+		if ($request->has("oper_sel")) {
+			$oper_sel=$request->input("oper_sel"); //in sidemenu
+			if (!$request->has("funzionario")) $funzionario=$oper_sel;
+		}
+		
+		if ($request->has("funzionario")) $oper_sel=$funzionario;
+		
+		$azienda=$request->input("azienda"); //in dashboard
+		$azi_sel="";
+		if ($request->has("azi_sel")) {
+			$azi_sel=$request->input("azi_sel"); //in sidemenu
+			if (!$request->has("azienda")) $azienda=$azi_sel;
+		}	
+		if ($request->has("azienda")) $azi_sel=$azienda;
+
+		
+			
 		$periodo1=$request->input("periodo1");
 		$funzionario1=$request->input("funzionario1");
 
@@ -73,22 +100,23 @@ public function __construct()
 		$attivita_index=$this->attivita_index();
 		$categorie=$this->cat_index();
 		$settori=$this->settori();
-		$schema=$this->schema($request,1);
-		$schema1=$this->schema($request,2);
+		$schema=$this->schema($request,1,$funzionario,$azienda,$periodo);
+		$schema1=$this->schema($request,2,$funzionario,$azienda,$periodo);
 
-		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti);
+		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti)->with('oper_sel',$oper_sel)->with('azi_sel',$azi_sel)->with('azienda',$azienda)->with('per_sel',$per_sel);
 		
 	}	
 	
-	public function schema($request,$tipo) {
+	public function schema($request,$tipo,$funzionario,$azienda,$periodo) {
 		
-		if (!$request->has("periodo")) return array();
+		if (strlen($periodo)==0) return array();
 		
 		
 		//$this->tipouser;
 
-		$periodo=$request->input("periodo");
-		$funzionario=$request->input("funzionario");
+		
+		
+
 		$periodo1=$request->input("periodo1");
 		$funzionario1=$request->input("funzionario1");
 		if ($tipo==2) {
@@ -110,20 +138,28 @@ public function __construct()
 			
 			$schemi=DB::table('schemi as s')
 			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'))
-			->where('periodo','like',"%$annoref%")
+			->join('documenti as d','d.id_schema','s.id')
+			->where('s.periodo','like',"%$annoref%")
 			->when($ref_user!="all", function ($schemi) use ($ref_user) {
-				return $schemi->where('id_funzionario','=',$ref_user);
+				return $schemi->where('s.id_funzionario','=',$ref_user);
 			})			
-			->groupBy('id_categoria')
-			->groupBy('id_attivita')
-			->groupBy('id_settore')
+			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
+				return $schemi->where('d.azienda','=',$azienda);
+			})
+			->groupBy('s.id_categoria')
+			->groupBy('s.id_attivita')
+			->groupBy('s.id_settore')
 			->get();
 						
 		} else {
 			$schemi=DB::table('schemi as s')
 			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
-			->where('periodo','=',$periodo)
-			->where('id_funzionario','=',$ref_user)
+			->join('documenti as d','d.id_schema','s.id')
+			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
+				return $schemi->where('d.azienda','=',$azienda);
+			})			
+			->where('s.periodo','=',$periodo)
+			->where('s.id_funzionario','=',$ref_user)
 			->get();
 		}
 		

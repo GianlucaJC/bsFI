@@ -58,23 +58,6 @@ class AjaxController extends Controller
 		$url_completo="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore/$filename";
 
 		
-		$documenti = new documenti;
-		$documenti->dele=0;
-		$documenti->periodo_data=date("Y-m-d");
-		$documenti->periodo=$periodo;
-		$documenti->id_funzionario=$ref_user;
-		$documenti->id_categoria=$id_categoria;
-		$documenti->id_attivita=$id_attivita;
-		$documenti->id_settore=$id_settore;
-		$documenti->filename=$filename;
-		$documenti->file_user=$file_user;
-		$documenti->azienda=$azienda;
-		$documenti->url_completo=$url_completo;
-		
-
-		$documenti->save();
-		
-		
 		$id_ref = DB::table("schemi")
 		->select('id')
 		->where('id_funzionario', "=",$ref_user)
@@ -100,7 +83,24 @@ class AjaxController extends Controller
 			$schemi->valore=1;
 		else
 			$schemi->increment('valore');
-		$schemi->save();		
+		$schemi->save();
+		$id_schema=$schemi->id;
+		
+		
+		$documenti = new documenti;
+		$documenti->dele=0;
+		$documenti->periodo_data=date("Y-m-d");
+		$documenti->periodo=$periodo;
+		$documenti->id_funzionario=$ref_user;
+		$documenti->id_categoria=$id_categoria;
+		$documenti->id_attivita=$id_attivita;
+		$documenti->id_settore=$id_settore;
+		$documenti->filename=$filename;
+		$documenti->file_user=$file_user;
+		$documenti->azienda=$azienda;
+		$documenti->url_completo=$url_completo;
+		$documenti->id_schema=$id_schema;
+		$documenti->save();
 			
 		////sistema notifiche	
 		$id_log=Auth::user()->id;	
