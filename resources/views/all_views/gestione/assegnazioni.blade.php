@@ -103,6 +103,7 @@
 						
 				</div>
 				<p>Azienda assegnata: <input type="text" class="classname" readonly  name='azienda' id='azienda' value='Non assegnata'/>
+				<input type='hidden' name='id_fiscale' id='id_fiscale'>
 				</p>
 				<button type="button" class="btn btn-primary" onclick="real_ass()">Assegnazione azienda selezionata</button>
 				<button type="button" class="btn btn-secondary ml-2" onclick="close_new()">Chiudi</button>
@@ -206,6 +207,6 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/assegnazioni.js?ver=1.413"></script>
+	<script src="{{ URL::asset('/') }}dist/js/assegnazioni.js?ver=1.416"></script>
 
 @endsection

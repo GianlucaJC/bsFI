@@ -67,21 +67,27 @@ function close_new() {
 	$(".aziende").val('')
 }
 function set_a(value) {
-	azienda=""
+	azienda="";
 	
 	if (value==1) {
-		azienda=$('#list_aziende_e option:selected').text();		
+		azienda=$('#list_aziende_e option:selected').text();
 		old_v=$('#list_aziende_e').val()
+		$("#id_fiscale").val($("#list_aziende_e").val());
 	}
 	if (value==2) {
 		azienda=$('#list_aziende_fissi option:selected').text();		
 		old_v=$('#list_aziende_fissi').val()
+		$("#id_fiscale").val($("#list_aziende_fissi").val());
 	}	
 	if (value==3) {
 		azienda=$('#list_aziende_custom option:selected').text();		
 		old_v=$('#list_aziende_custom').val()
+		$("#id_fiscale").val('');
 	}	
-	if (azienda=="Select...") azienda="";
+	if (azienda=="Select...") {
+		azienda="";
+		$("#id_fiscale").val('');
+	}
 	
 	$(".aziende").val('')
 	if (value==1) $('#list_aziende_e').val(old_v)
@@ -90,6 +96,7 @@ function set_a(value) {
 	azienda=azienda.trim()	
 	
 	$("#azienda").val(azienda)
+	
 	
 
 }

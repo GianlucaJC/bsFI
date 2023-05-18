@@ -1,21 +1,13 @@
+<!-- l'override di stile del sidebar (con aumento della width) è in allpage !-->
+@php 
+	global $utenti;
+	global $user_az;
+	global $info_cantieri;
+@endphp
 
-<?php
-use App\Models\User;
-$id = Auth::user()->id;
-$user = User::find($id);
-$utenti=user::select('id','name')->orderBy('name')->get();
-$assegnazioni=DB::table('assegnazioni as a')
-->select('a.*')
-->orderBy('a.id_user')
-->orderBy('a.azienda')
-->get();
-$user_az=array();
-foreach($assegnazioni as $assegnazione) {
-	$id_user=$assegnazione->id_user;
-	$user_az[$id_user][]=$assegnazione->azienda;
-}
-	
-?>
+<!-- In allpage calcolo aziende e cantieri mostrati nel side !-->
+@include('all_views.viewmaster.allpage')
+
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
@@ -145,10 +137,13 @@ foreach($assegnazioni as $assegnazione) {
 						$az="";
 						$vis="display:none";
 						if (isset($oper_sel) && $oper_sel==$info->id) $vis="";
+	
 						echo "<div id='div_az$num' style='$vis'>";
+						
 						if (array_key_exists($info->id,$user_az)){
+							
 							for ($sca=0;$sca<=count($user_az[$info->id])-1;$sca++) {
-								$az=$user_az[$info->id][$sca];
+								$az=$user_az[$info->id][$sca]['azienda'];
 								$text="text-info";
 								if (isset($azi_sel) && $azi_sel==$az) $text="text-warning";
 								$js="";
@@ -164,6 +159,25 @@ foreach($assegnazioni as $assegnazione) {
 							}
 							
 						}
+						
+						$ref_u=strtoupper($info->email);
+						if (isset($info_cantieri[$ref_u])) {
+							echo "<hr>";
+							echo "<font color='white'><h5>Cantieri assegnati</h5></font>";
+							for ($ele=0;$ele<=count($info_cantieri[$ref_u])-1;$ele++) {
+								$ragione_sociale=$info_cantieri[$ref_u][$ele]['azienda'];
+								echo "<span class='ml-4 text-info'>";
+									echo $ragione_sociale;
+								echo "</span>";
+								$id_a=$info_cantieri[$ref_u][$ele]['id_azienda'];
+								echo "<a href='https://www.filleaoffice.it/filleago/index.php/sito/organizza?cantiere=$id_a' class='ml-5 nav-link p-1' onclick=''  target='_blank'>";
+									echo " - <small>";
+									echo $info_cantieri[$ref_u][$ele]['indirizzo_c'];
+									echo "</small>";
+								echo "</a>";
+							}
+						}
+							
 						
 						echo "</div>";
 						$num++;

@@ -45,7 +45,7 @@ public function __construct()
 
 	public function dashboard(){
 		$request=request();
-		
+
 		
 		$confr=$request->input("confr");
 		$periodo=$request->input("periodo");
@@ -421,6 +421,7 @@ public function __construct()
 
 		//nuova azienda da associare
 		$azienda=$request->input("azienda");
+		$id_fiscale=$request->input("id_fiscale");
 		$user_ass=$request->input("user_ass");
 		$msg_err="";
 		if (strlen($azienda)!=0 && strlen($user_ass)!=0) {
@@ -433,6 +434,7 @@ public function __construct()
 				$assegnazioni->dele=0;
 				$assegnazioni->id_user=$user_ass;
 				$assegnazioni->azienda=$azienda;
+				$assegnazioni->id_fiscale=$id_fiscale;
 				$assegnazioni->save();
 			} else $msg_err="<b>Attenzione!</b><hr><i>L'azienda <b>$azienda</b> risulta già associata!</i>";
 		}
