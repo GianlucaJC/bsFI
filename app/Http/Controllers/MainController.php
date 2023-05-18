@@ -213,7 +213,9 @@ public function __construct()
 		->select('a.id','a.dele','a.descrizione','c.id as id_cat','c.categoria','a.ref_categoria')
 		->join('categorie as c','a.ref_categoria','c.id')
 		->where('a.dele', "=","0")
-		->orderBy('a.ordine')->get();
+		->orderBy('c.id')
+		->orderBy('a.ordine')
+		->get();
 		$resp=array();$sc=0;
 		$id_old=0;
 		foreach($definizione_attivita as $attivita) {
@@ -227,6 +229,7 @@ public function __construct()
 			$resp[$id_cat][$sc]['categoria']=$attivita->categoria;
 			$sc++;
 		}
+		
 		return $resp;
 	}
 	
