@@ -124,7 +124,7 @@
 				@csrf
 				@php ($num=0)
 				@foreach($utenti as $info)	
-					<a href="#" class="nav-link p-1" onclick="$('#oper_sel').val({{$info->id}});$('#div_az{{$num}}').show();this.closest('form').submit()">
+					<a href="#" class="nav-link p-1" onclick="$('#oper_sel').val({{$info->id}});this.closest('form').submit()">
 					  <i class="far fa-circle nav-icon"></i>
 						<?php if (isset($oper_sel) && $oper_sel==$info->id)
 							echo "<b><font color='orange'>".$info->name."</font></b>";
