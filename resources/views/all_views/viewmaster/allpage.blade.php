@@ -16,6 +16,9 @@ foreach($utenti as $info) {
 }
 
 $today=date("Y-m-d");
+
+/*
+//Metodo nativo per attingere alle assegnazioni dei cantieri tramite join fra tabelle
 $cantieri=DB::table('filleago.aziende_segnalazioni as a')
 ->join('filleago.segnalazioni as s','s.id','a.id_segnalazione')
 ->leftjoin('filleago.aziende as d','a.id_azienda','d.p_iva')
@@ -27,6 +30,19 @@ $cantieri=DB::table('filleago.aziende_segnalazioni as a')
 })
 ->groupBy('s.id')
 ->get();
+*/
+
+
+//Metodo alternativo (diretto) per attingere alle assegnazioni dei cantieri senza join ma tramite una tabella ad hoc sincronizzata con le altre (in sede di assegnazioni/revoche dei cantieri agli operatori in filleago)
+$cantieri=DB::table('filleago.assegnazioni_rendiconta as a')
+->select('a.id_user as utente','a.azienda as denominazione','a.id_azienda','a.indirizzo_c')
+->whereIn('a.id_user',$tessere)
+->where(function ($cantieri) use ($today) {
+	$cantieri->whereNull('a.data_fine_lavori')
+	->orWhere("a.data_fine_lavori",">=", $today);
+})
+->get();
+
 
 $info_cantieri=array();
 foreach ($cantieri as $cantiere) {
