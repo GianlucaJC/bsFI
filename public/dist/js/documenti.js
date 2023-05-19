@@ -38,10 +38,18 @@ $(document).ready( function () {
 	*/
 	
  var table = $('#tbl_list_doc').DataTable({
-		"order": [[ 1, "desc" ]],
-		"oLanguage": {
-			"sInfo": "Showing _START_ to _END_ of _TOTAL_ items."
-		}
+		order: [ 0, 'desc' ],
+		dom: 'Bfrtip',
+		buttons: [
+			'excel', 'pdf'
+		],			 
+        language: {
+            lengthMenu: 'Visualizza _MENU_ Documenti per pagina',
+            zeroRecords: 'Nessun Documento trovato',
+            info: 'Pagina _PAGE_ di _PAGES_',
+            infoEmpty: 'Non sono presenti Documenti',
+            infoFiltered: '(Filtrati da _MAX_ Documenti totali)',
+        },
 	});
 
     $("#tbl_list_doc tfoot th").each( function ( i ) {
