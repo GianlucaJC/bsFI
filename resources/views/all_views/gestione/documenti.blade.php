@@ -160,6 +160,6 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti.js?ver=1.48"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti.js?ver=1.49"></script>
 
 @endsection

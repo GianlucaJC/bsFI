@@ -171,7 +171,13 @@
 									echo $ragione_sociale;
 								echo "</span>";
 								$id_a=$info_cantieri[$ref_u][$ele]['id_azienda'];
-								echo "<a href='https://www.filleaoffice.it/filleago/index.php/sito/organizza?cantiere=$id_a' class='ml-5 nav-link p-1' onclick=''  target='_blank'>";
+								
+								$url="https://www.filleaoffice.it/filleago/index.php/sito/organizza?cantiere=$id_a";
+								
+								//$url="http://localhost/filleago/index.php/sito/organizza?cantiere=$id_a";
+								
+								
+								echo "<a href='$url' class='ml-5 nav-link p-1' onclick=''  target='_blank'>";
 									echo " - <small>";
 									echo $info_cantieri[$ref_u][$ele]['indirizzo_c'];
 									echo "</small>";
