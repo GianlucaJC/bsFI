@@ -2,6 +2,7 @@
 	global $utenti;
 	global $user_az;
 	global $info_cantieri;
+	global $user;
 @endphp
 <?php
 use App\Models\User;

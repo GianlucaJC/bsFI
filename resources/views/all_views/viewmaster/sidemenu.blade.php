@@ -3,6 +3,7 @@
 	global $utenti;
 	global $user_az;
 	global $info_cantieri;
+	global $user;
 @endphp
 
 <!-- In allpage calcolo aziende e cantieri mostrati nel side !-->
