@@ -387,12 +387,20 @@ public function __construct()
 			$attivita[$at->id]=$at->descrizione;
 		}
 		
+		$dele_contr=$request->input("dele_contr");
+		
+		if (strlen($dele_contr)!=0) {
+			documenti::where('id', $dele_contr)
+			  ->update(['dele' => 1]);			
+		}		
+		
 		$categorie=$this->cat_index();
 		$settori=$this->settori();		
 		
 		if ($this->tipouser==1) {
 			$documenti=DB::table('documenti as d')
 			->select('d.*')
+			->where('d.dele','=',0)
 			->orderBy("created_at","desc")
 			->get();
 		} else {
@@ -401,6 +409,7 @@ public function __construct()
 			->get();
 			
 			$documenti = documenti::select("*")
+			->where('d.dele','=',0)
 			->where(function($query) use($aziende){
 				foreach ($aziende as $azienda) {
 					$query->orWhere("azienda", '=', $azienda->azienda);

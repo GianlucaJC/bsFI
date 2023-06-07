@@ -64,6 +64,7 @@
 							<th>Settore</th>
 							<th>Azienda</th>
 							<th>Documento</th>
+							<th>Elimina</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -100,7 +101,12 @@
 											{{ $documento->file_user }}
 										@endif
 									</a>
-								</td>	
+								</td>
+								<td>
+									<a href='#' onclick="dele_element({{$documento->id}})">
+										<button type="submit" name='dele_ele' class="btn btn-danger"><i class="fas fa-trash"></i></button>	
+									</a>								
+								</td>
 
 							</tr>
 						@endforeach
@@ -116,6 +122,7 @@
 							<th>Settore</th>
 							<th>Azienda</th>
 							<th>Documento</th>
+							<th></th>
 						</tr>
 					</tfoot>					
 				</table>
