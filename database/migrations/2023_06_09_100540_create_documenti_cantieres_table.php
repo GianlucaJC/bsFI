@@ -17,6 +17,7 @@ return new class extends Migration
 			$table->integer('id_funzionario')->index();
 			$table->integer('id_cantiere')->index();
 			$table->string('filename',50);
+			$table->string('file_user',100);
 			$table->string('url_completo',100)->nullable();
             $table->timestamps();
         });

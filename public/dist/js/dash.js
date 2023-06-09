@@ -473,14 +473,19 @@ function view_form() {
 }
 
 function step2(value) {
-	
+	periodo=$("#periodo").val();
 	azienda=$("#azienda").val()
 	id_settore=$("#list_settori").val();
 	
-	if (id_settore.length==0 || azienda.length==0) {
+	if (id_settore.length==0 || azienda.length==0 || periodo.length!=7) {
 		$("#div_step2").empty();
 		$("#btn_save").prop("disabled",true);
-		if (value=="1") alert("Definire correttamente i dati richiesti!");
+		if (value=="1") {
+			if (periodo.length!=7)
+				alert("Definire correttamente un periodo di riferimento!");
+			else
+				alert("Definire correttamente i dati richiesti!");
+		}
 		return false
 	}
 

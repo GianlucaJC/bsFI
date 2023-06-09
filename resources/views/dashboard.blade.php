@@ -361,7 +361,7 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.347"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.349"></script>
 
 	
 	<!-- per upload -->
