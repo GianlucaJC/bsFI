@@ -1,5 +1,6 @@
 <!-- l'override di stile del sidebar (con aumento della width) è in allpage !-->
 @php 
+	use Illuminate\Support\Facades\Storage;
 	global $utenti;
 	global $user_az;
 	global $info_cantieri;
@@ -167,10 +168,11 @@
 							echo "<font color='white'><h5>Cantieri assegnati</h5></font>";
 							for ($ele=0;$ele<=count($info_cantieri[$ref_u])-1;$ele++) {
 								$ragione_sociale=$info_cantieri[$ref_u][$ele]['azienda'];
-								echo "<span class='ml-4 text-info'>";
+								echo "<span class='d-block ml-4 text-info'>";
 									echo $ragione_sociale;
 								echo "</span>";
 								$id_a=$info_cantieri[$ref_u][$ele]['id_azienda'];
+								$id_cantiere=$info_cantieri[$ref_u][$ele]['id_cantiere'];
 								
 								$url="https://www.filleaoffice.it/filleago/index.php/sito/organizza?cantiere=$id_a";
 								
@@ -178,10 +180,26 @@
 								
 								
 								echo "<a href='$url' class='ml-5 nav-link p-1' onclick=''  target='_blank'>";
-									echo " - <small>";
+									echo " - ";
+									echo "<small>";
 									echo $info_cantieri[$ref_u][$ele]['indirizzo_c'];
-									echo "</small>";
+									echo "</small> ";
 								echo "</a>";
+								$ml="ml-5";
+								
+								$path = "allegati/cantieri/$id_cantiere";
+								
+								if(File::isDirectory($path)){
+									echo "<a href='javascript:void(0)' onclick='docincantiere($id_cantiere)' class='d-inline ml-5 nav-link p-1'>";
+										echo "<i class='fas fa-folder'></i>";
+									echo "</a>";
+									$ml="";
+								}
+								echo "<a href='javascript:void(0)' onclick='newdocincantiere($id_cantiere)' class='d-inline nav-link p-1 $ml'>";
+									echo "<i class='fas fa-folder-plus'></i>";
+								echo "</a>";
+
+								
 							}
 						}
 							
@@ -202,3 +220,4 @@
     </div>
     <!-- /.sidebar -->
   </aside>
+  

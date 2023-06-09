@@ -35,7 +35,7 @@ $cantieri=DB::table('filleago.aziende_segnalazioni as a')
 
 //Metodo alternativo (diretto) per attingere alle assegnazioni dei cantieri senza join ma tramite una tabella ad hoc sincronizzata con le altre (in sede di assegnazioni/revoche dei cantieri agli operatori in filleago)
 $cantieri=DB::table('filleago.assegnazioni_rendiconta as a')
-->select('a.id_user as utente','a.azienda as denominazione','a.id_azienda','a.indirizzo_c')
+->select('a.id as id_cantiere','a.id_user as utente','a.azienda as denominazione','a.id_azienda','a.indirizzo_c')
 ->whereIn('a.id_user',$tessere)
 ->where(function ($cantieri) use ($today) {
 	$cantieri->whereNull('a.data_fine_lavori')
@@ -48,7 +48,8 @@ $info_cantieri=array();
 foreach ($cantieri as $cantiere) {
 	if (!isset($info_cantieri[$cantiere->utente])) $indice=0;
 	else $indice=count($info_cantieri[$cantiere->utente]);
-	
+
+	$info_cantieri[$cantiere->utente][$indice]['id_cantiere']=$cantiere->id_cantiere;	
 	$info_cantieri[$cantiere->utente][$indice]['azienda']=$cantiere->denominazione;
 	$info_cantieri[$cantiere->utente][$indice]['id_azienda']=$cantiere->id_azienda;
 	$info_cantieri[$cantiere->utente][$indice]['indirizzo_c']=$cantiere->indirizzo_c;

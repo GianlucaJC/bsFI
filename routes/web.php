@@ -57,6 +57,11 @@ Route::group(['only_log' => ['auth']], function () {
 
 //routing Ajax
 Route::group(['only_log' => ['auth']], function () {
+	Route::post('docincantiere', [ 'as' => 'docincantiere', 'uses' =>'App\Http\Controllers\AjaxController@docincantiere']);	
+	Route::post('delerowcant', [ 'as' => 'delerowcant', 'uses' =>'App\Http\Controllers\AjaxController@delerowcant']);
+	Route::post('update_doc_cant', [ 'as' => 'update_doc_cant', 'uses' =>'App\Http\Controllers\AjaxController@update_doc_cant']);
+
+
 	Route::post('setvalue', [ 'as' => 'setvalue', 'uses' =>'App\Http\Controllers\AjaxController@setvalue']);	
 
 	Route::post('savedata', [ 'as' => 'savedata', 'uses' =>'App\Http\Controllers\AjaxController@savedata']);

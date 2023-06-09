@@ -11,17 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('documenti', function (Blueprint $table) {
+        Schema::create('documenti_cantiere', function (Blueprint $table) {
             $table->id();
 			$table->integer('dele');
-			$table->string('periodo',10);
-			$table->date('periodo_data');
 			$table->integer('id_funzionario')->index();
-			$table->integer('id_categoria')->index();
-			$table->integer('id_attivita')->index();
-			$table->integer('id_settore')->index();
+			$table->integer('id_cantiere')->index();
 			$table->string('filename',50);
-			$table->string('file_user',100);
 			$table->string('url_completo',100)->nullable();
             $table->timestamps();
         });
@@ -32,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('documentis');
+        Schema::dropIfExists('documenti_cantieres');
     }
 };

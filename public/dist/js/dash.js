@@ -41,6 +41,48 @@ function delerow(id_row) {
 	
 }
 
+
+function delerowcant(id_doc) {
+	if (!confirm("Sicuri di cancellare il documento?")) return false;
+	
+	base_path = $("#url").val();
+	let CSRF_TOKEN = $("#token_csrf").val();
+	html=""
+	html+="<center><div class='spinner-border spinner-border-sm text-secondary' role='status'></div></center>";
+	
+	$("#dele_doc_cant"+id_doc).html(html)
+	setTimeout(function(){
+		
+		fetch(base_path+'/delerowcant', {
+			method: 'post',
+			//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached		
+			headers: {
+			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+			},
+			body: '_token='+ CSRF_TOKEN+'&id_doc='+id_doc
+		})
+		.then(response => {
+			if (response.ok) {
+			   return response.json();
+			}
+		})
+		.then(resp=>{
+			if (resp.status=="KO") {
+				alert("Problemi occorsi durante la cancellazione del file.\n\nDettagli:\n"+resp.message);
+				$("#dele_doc_cant"+id_doc).html('')
+				return false;
+			}
+			$("#tr_doc_cant"+id_doc).remove();
+			close_doc.tipo="refresh";			
+		})
+		.catch(status, err => {
+			return console.log(status, err);
+		})	
+	},500)		
+	
+}
+
+
 function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore) {
 	html=""
 	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
@@ -183,6 +225,129 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 			}
 		});	
 	},500)
+	
+}
+
+
+function docincantiere(id_cantiere) {
+	html=""
+	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
+	$("#title_doc").html("Elenco documenti relativi al cantiere")
+	$("#bodyvalue").html(html)
+	$("#div_save").empty()
+	$('#modalvalue').modal('show')	
+
+	base_path = $("#url").val();
+	$.ajaxSetup({
+		headers: {
+			'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+		}
+	});
+	setTimeout(function () {
+		let CSRF_TOKEN = $("#token_csrf").val();
+		$.ajax({
+			type: 'POST',
+			url: base_path+"/docincantiere",
+			data: {_token: CSRF_TOKEN,id_cantiere:id_cantiere},
+			success: function (risposta) {
+
+				html="<div class='container-fluid' id='div_main_value'>";
+					html+="<table id='tb_inforow' class='table table-striped table-valign-middle' style='padding:0.15rem'>";
+						html+="<thead>";
+							html+="<tr>";
+								html+="<th>Elimina</th>";
+								html+="<th>Inserito da</th>";
+								html+="<th>Documento</th>";
+								html+="<th style='text-align:center'>Creato il</th>";
+							html+="</tr>";
+						html+="</thead>";
+						html+="<tbody>";
+						ent=0;user_ref=0;
+						$.each(JSON.parse(risposta), function (i, item) {
+							if (ent==0) user_ref=item.user_log
+							ent=1
+							nomef=item.file_user
+							url_completo=item.url_completo
+							
+							html+="<tr id='tr_doc_cant"+item.id+"'>";
+								html+="<td> <span id='dele_doc_cant"+item.id+"'></span>";
+								if (user_ref==item.id_funzionario) {
+									html+="<button type='button' class='btn btn-warning btn-sm' onclick='delerowcant("+item.id+")'>Elimina</button>";
+								}
+								html+="</td>";
+								
+								html+="<td>";
+									html+=item.name
+								html+="</td>";
+								html+="<td>"
+								html+="<a href='"+url_completo+"' target='_blank'>";
+										html+=nomef
+								html+="</a>";
+								html+="<td style='text-align:center'>"
+										html+=item.created_at
+								html+="</td>";
+
+							html+="</tr>";
+						})
+						html+="</tbody>";
+					html+="</table>";
+				html+="</div>";
+				
+				$("#bodyvalue").html(html)
+
+
+
+			}			
+		});	
+	},500)
+	
+}
+function newdocincantiere(id_cantiere) {
+	html=""
+	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
+	$("#title_doc").html("Nuovo documento per il cantiere")
+	$("#bodyvalue").html(html)
+	$("#div_save").empty()
+	$('#modalvalue').modal('show')	
+
+	
+	fetch('class_allegati.php', {
+		method: 'post',
+		//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached		
+		headers: {
+		  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+		},
+		body: 'operazione=refresh_tipo'
+	})
+	.then(response => {
+		if (response.ok) {
+		   return response.text();
+		}
+		
+	})
+	.then(resp=>{
+		//$("#div_sezione"+sezione).html(resp);
+		
+		$("#bodyvalue").html(resp);
+		$("#div_descr_a").remove()
+		
+		//function set_class_allegati() in demo-config.js
+		set_class_allegati.from="allegati_cantiere"
+
+		set_class_allegati.id_cantiere=id_cantiere
+		set_class_allegati(); 
+
+		html="<button id='btn_save' disabled type='button' class='btn btn-primary' onclick='saveinfocant()'>Salva</button>";
+		//saveinfocant() in demo-config.js
+
+		
+		$("#div_save").html(html);		
+	})
+	.catch(status, err => {
+		
+		return console.log(status, err);
+	})	
+		
 	
 }
 

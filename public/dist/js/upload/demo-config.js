@@ -14,30 +14,55 @@ function set_class_allegati() {
    * UI functions ui_* can be located in: demo-ui.js
    */
   	
-  from=set_class_allegati.from
-  file_user=set_class_allegati.file_user
-  ref_user=set_class_allegati.ref_user
-  periodo=set_class_allegati.periodo
-  id_categoria=set_class_allegati.id_categoria
-  id_attivita=set_class_allegati.id_attivita
-  id_settore=set_class_allegati.id_settore
-  azienda=set_class_allegati.azienda
+	
+	/*
+		I seguenti dati provengono dal file dash.js che li preimposta.
+		A seconda di come viene valorizzato [from] si predispongono
+		una serie di variabili da passare via Ajax tramite la function saveinfo() o saveinfocant() o altre function che si vogliono aggiungere.
+		Questi function vengono invocate da bottoni 'salva', creati (da dash.js) iniettando html nella finestra modal (in dashboard.blade.php) 
+		nel div_save
+	
+	*/
+	from=set_class_allegati.from
+	
+	if (from=="allegati") {
+		file_user=set_class_allegati.file_user
+		ref_user=set_class_allegati.ref_user
+		periodo=set_class_allegati.periodo
+		id_categoria=set_class_allegati.id_categoria
+		id_attivita=set_class_allegati.id_attivita
+		id_settore=set_class_allegati.id_settore
+		azienda=set_class_allegati.azienda
 
+		extraData= {
+		  "from":from,
+		  "ref_user":ref_user,
+		  "periodo":periodo,
+		  "id_categoria":id_categoria,
+		  "id_attivita":id_attivita,
+		  "id_settore":id_settore
+		}
+	}
+	
+	if (from=="allegati_cantiere") {
+		file_user=set_class_allegati.file_user
+		id_cantiere=set_class_allegati.id_cantiere
+
+
+		extraData= {
+		  "from":from,
+		  "id_cantiere":id_cantiere,
+		}
+	}
+  
 
   base_path = $("#url").val();
 
   $('#drag-and-drop-zone').dmUploader({ //
     url: base_path+'/upload.php',
-	extraData: {
-	  "from":from,
-	  "ref_user":ref_user,
-	  "periodo":periodo,
-	  "id_categoria":id_categoria,
-	  "id_attivita":id_attivita,
-	  "id_settore":id_settore
-	},
+	extraData:extraData,
 	
-	extFilter: ["pdf","doc","docx","jpg","png"],
+	extFilter: ["pdf","doc","docx","jpg","png","odt"],
 	
     maxFileSize: 80000000, // 8 Megs 
     onDragEnter: function(){
@@ -92,14 +117,22 @@ function set_class_allegati() {
 	  $("#btn_save").removeAttr("disabled");
 	  $('#div_main_value *').prop('disabled',true);
 	  $("#file_user").removeAttr("disabled");
-	  saveinfo.filename=data.filename
-	  saveinfo.file_user=file_user
-	  saveinfo.ref_user=ref_user
-	  saveinfo.periodo=periodo
-	  saveinfo.id_categoria=id_categoria
-	  saveinfo.id_attivita=id_attivita
-	  saveinfo.id_settore=id_settore
-	  saveinfo.azienda=azienda
+	  if (from=="allegati") {
+		  saveinfo.filename=data.filename
+		  saveinfo.file_user=file_user
+		  saveinfo.ref_user=ref_user
+		  saveinfo.periodo=periodo
+		  saveinfo.id_categoria=id_categoria
+		  saveinfo.id_attivita=id_attivita
+		  saveinfo.id_settore=id_settore
+		  saveinfo.azienda=azienda
+	  }
+	  if (from=="allegati_cantiere") {
+		  saveinfocant.filename=data.filename
+		  saveinfocant.file_user=file_user
+		  saveinfocant.id_cantiere=id_cantiere
+		  close_doc.tipo="refresh"
+	  }
 	 
 	 
     },
@@ -169,3 +202,55 @@ function saveinfo() {
 	
 	},1000);	
 }
+
+
+function saveinfocant() {
+	if( typeof saveinfocant.filename == 'undefined' ) {
+		$("#btn_save").prop("disabled",true);
+		console.log("false");
+		return false
+	}	
+	file_user=$("#file_user").val()
+	if (file_user.length==0) {
+		alert("Definire un nome per l'allegato da inviare al server!");
+		return false
+	}
+
+	$("#btn_save").prop("disabled",true);
+	base_path = $("#url").val();
+	let CSRF_TOKEN = $("#token_csrf").val();
+	
+	html="<span role='status' aria-hidden='true' class='spinner-border spinner-border-sm'></span> Attendere...";
+
+	$("#div_save").html(html);
+	setTimeout(function(){
+	
+		fetch(base_path+'/update_doc_cant', {
+			method: 'post',
+			//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached		
+			headers: {
+			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+			},
+			body: '_token='+ CSRF_TOKEN+'&filename='+saveinfocant.filename+"&file_user="+file_user+"&id_cantiere="+saveinfocant.id_cantiere
+		})
+		.then(response => {
+			if (response.ok) {
+			   return response.json();
+			}
+		})
+		.then(resp=>{
+			$("#div_save").empty();			
+			if (resp.status=="KO") {
+				alert("Problemi occorsi durante il salvataggio.\n\nDettagli:\n"+resp.message);
+				return false;
+			}
+			close_doc.tipo="refresh"
+		})
+		.catch(status, err => {
+			return console.log(status, err);
+		})	
+	
+	
+	},1000);	
+}
+

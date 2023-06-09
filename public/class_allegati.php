@@ -64,7 +64,9 @@
 	 <div class="form-group">
 		<label for="file_user">Descrizione allegato</label>
 		<input type="text" class="form-control" id="file_user" name="file_user" aria-describedby="File User" placeholder="Assegnazione nome allegato" maxlength=100>
-		<small id="file_user" class="form-text text-muted">Servirà per identificare meglio il documento nella sezione relativa.</small>
+		<div id='div_descr_a'>
+			<small  class="form-text text-muted">Servirà per identificare meglio il documento nella sezione relativa.</small>
+		</div>
 	</div>
 	
 </div>

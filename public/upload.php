@@ -32,9 +32,9 @@ try {
 
 	
 	//Upload documenti:
-	//$from=="2" -> da scheda candidato
-	//$from=="doc" -> da archivi->Area documenti
-	//$from=="cedolini" ->dalla dashboard->upload cedolini
+	//$from=="allegati" -> da lente o cliccando sui servizi
+	//$from=="allegati_cantieri" -> 
+	
 	$from=$_POST['from'];
 	  
 	if ($from=="allegati") {
@@ -55,6 +55,12 @@ try {
 		$sub="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore";
 		@mkdir($sub);
 	}	
+	
+	if ($from=="allegati_cantiere") {
+		$id_cantiere=$_POST['id_cantiere'];
+		$sub="allegati/cantieri/$id_cantiere";
+		@mkdir($sub);
+	}
 	
 	$filepath = "$sub/".$filename;
     if (!move_uploaded_file(
