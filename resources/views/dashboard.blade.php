@@ -367,6 +367,6 @@
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
 	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.300"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.392"></script>	
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.393"></script>	
 	
 @endsection

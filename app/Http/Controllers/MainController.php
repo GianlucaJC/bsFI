@@ -10,6 +10,7 @@ use App\Models\categorie;
 use App\Models\User;
 use App\Models\schemi;
 use App\Models\documenti;
+use App\Models\documenti_utili;
 use App\Models\aziende_custom;
 use App\Models\assegnazioni;
 use App\Models\notifiche;
@@ -423,6 +424,28 @@ public function __construct()
 		return view('all_views/gestione/documenti')->with('utenti', $utenti)->with('documenti', $documenti)->with('attivita',$attivita)->with('categorie',$categorie)->with('settori',$settori);
 	}
 	
+
+	public function documenti_utili(Request $request) {
+		$users=user::select('id','name')->orderBy('name')->get();
+		$utenti=array();
+		foreach ($users as $us) {
+			$utenti[$us->id]=$us->name;
+		}
+		$dele_contr=$request->input("dele_contr");
+		
+		if (strlen($dele_contr)!=0) {
+			$doc = documenti_utili::find($dele_contr);	
+			$doc->delete();
+			$doc_remove=$doc->url_completo;
+			@unlink($doc_remove);
+		}		
+			
+		$documenti_utili = documenti_utili::select("*")
+		->where('dele','=',0)
+		->orderBy("created_at","desc")->get();
+
+		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti);
+	}
 
 
 	public function assegnazioni(Request $request) {

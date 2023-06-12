@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\schemi;
 use App\Models\documenti;
 use App\Models\documenti_cantiere;
+use App\Models\documenti_utili;
 use App\Models\notifiche;
 use App\Models\assegnazioni;
 use DB;
@@ -204,6 +205,30 @@ class AjaxController extends Controller
 		echo json_encode($risp);
 
 	}	
+	
+	function update_doc_utili(Request $request) {
+		
+		$ref_user=Auth::user()->id;	
+		$filename=$request->input("filename");
+		$file_user=$request->input("file_user");
+		$url_completo="allegati/documenti_utili/$filename";
+
+		
+		$documenti = new documenti_utili;
+		$documenti->dele=0;
+		$documenti->id_funzionario=$ref_user;
+		$documenti->filename=$filename;
+		$documenti->file_user=$file_user;
+		$documenti->url_completo=$url_completo;
+		$documenti->save();
+			
+		$risp=array();
+
+		$risp['status']="OK";
+		$risp['esito']="insert";
+		echo json_encode($risp);
+
+	}		
 	
 	
 	function inforow(Request $request) {

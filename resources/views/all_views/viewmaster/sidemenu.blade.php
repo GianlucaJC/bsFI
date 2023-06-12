@@ -90,15 +90,23 @@
 
 			@endif 
           
-			  <li class="nav-item">
-				  <li class="nav-item">
+			<li class="nav-item">
+				<li class="nav-item">
 					<a href="{{route('documenti')}}" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Elenco documenti</p>
+						<i class="far fa-circle nav-icon"></i>
+						<p>Elenco documenti</p>
 					</a>
-				  </li>
-			  </li>
+				</li>
+			</li>
 
+			<li class="nav-item">
+				<li class="nav-item">
+					<a href="{{route('documenti_utili')}}" class="nav-link">
+						<i class="far fa-circle nav-icon"></i>
+						<p>Elenco documenti utili</p>
+					</a>
+				</li>
+			</li>
 
 	  
 		  <li class="nav-item">

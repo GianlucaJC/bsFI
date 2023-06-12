@@ -61,6 +61,10 @@ try {
 		$sub="allegati/cantieri/$id_cantiere";
 		@mkdir($sub);
 	}
+	if ($from=="allegati_utili") {
+		$sub="allegati/documenti_utili";
+		@mkdir($sub);
+	}
 	
 	$filepath = "$sub/".$filename;
     if (!move_uploaded_file(

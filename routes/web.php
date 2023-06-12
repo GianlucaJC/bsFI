@@ -24,6 +24,10 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::post('documenti', [ 'as' => 'documenti', 'uses' => 'App\Http\Controllers\MainController@documenti'])
 	->middleware(['role:admin']);
 
+	Route::get('documenti_utili', [ 'as' => 'documenti_utili', 'uses' => 'App\Http\Controllers\MainController@documenti_utili']);
+
+	Route::post('documenti_utili', [ 'as' => 'documenti_utili', 'uses' => 'App\Http\Controllers\MainController@documenti_utili']);
+
 
 	Route::get('assegnazioni', [ 'as' => 'assegnazioni', 'uses' => 'App\Http\Controllers\MainController@assegnazioni'])
 	->middleware(['role:admin']);
@@ -67,6 +71,9 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::post('savedata', [ 'as' => 'savedata', 'uses' =>'App\Http\Controllers\AjaxController@savedata']);
 
 	Route::post('update_doc', [ 'as' => 'update_doc', 'uses' =>'App\Http\Controllers\AjaxController@update_doc']);
+
+	Route::post('update_doc_utili', [ 'as' => 'update_doc_utili', 'uses' =>'App\Http\Controllers\AjaxController@update_doc_utili']);
+
 
 	Route::post('inforow', [ 'as' => 'inforow', 'uses' =>'App\Http\Controllers\AjaxController@inforow']);
 

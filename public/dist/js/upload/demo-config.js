@@ -16,11 +16,10 @@ function set_class_allegati() {
   	
 	
 	/*
-		I seguenti dati provengono dal file dash.js che li preimposta.
+		I seguenti dati provengono dal file dash.js (o da documenti_utili.js o da qualiasi altro js che ne abbia bisogno) che li preimposta.
 		A seconda di come viene valorizzato [from] si predispongono
 		una serie di variabili da passare via Ajax tramite la function saveinfo() o saveinfocant() o altre function che si vogliono aggiungere.
-		Questi function vengono invocate da bottoni 'salva', creati (da dash.js) iniettando html nella finestra modal (in dashboard.blade.php) 
-		nel div_save
+		Queste function vengono invocate da bottoni 'salva', creati (da dash.js) iniettando html nella finestra modal (in dashboard.blade.php) nel div_save
 	
 	*/
 	from=set_class_allegati.from
@@ -54,7 +53,14 @@ function set_class_allegati() {
 		  "id_cantiere":id_cantiere,
 		}
 	}
-  
+
+	if (from=="allegati_utili") {
+		file_user=set_class_allegati.file_user
+
+		extraData= {
+		  "from":from
+		  }
+	}  
 
   base_path = $("#url").val();
 
@@ -133,7 +139,11 @@ function set_class_allegati() {
 		  saveinfocant.id_cantiere=id_cantiere
 		  close_doc.tipo="refresh"
 	  }
-	 
+	  if (from=="allegati_utili") {
+		  saveinfodoc.filename=data.filename
+		  saveinfodoc.file_user=file_user
+		  close_doc.tipo="refresh"
+	  }	 
 	 
     },
     onUploadError: function(id, xhr, status, message){
@@ -254,3 +264,52 @@ function saveinfocant() {
 	},1000);	
 }
 
+function saveinfodoc() {
+	if( typeof saveinfodoc.filename == 'undefined' ) {
+		$("#btn_save").prop("disabled",true);
+		console.log("false");
+		return false
+	}	
+	file_user=$("#file_user").val()
+	if (file_user.length==0) {
+		alert("Definire un nome per l'allegato da inviare al server!");
+		return false
+	}
+
+	$("#btn_save").prop("disabled",true);
+	base_path = $("#url").val();
+	let CSRF_TOKEN = $("#token_csrf").val();
+	
+	html="<span role='status' aria-hidden='true' class='spinner-border spinner-border-sm'></span> Attendere...";
+
+	$("#div_save").html(html);
+	setTimeout(function(){
+	
+		fetch(base_path+'/update_doc_utili', {
+			method: 'post',
+			//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached		
+			headers: {
+			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+			},
+			body: '_token='+ CSRF_TOKEN+'&filename='+saveinfodoc.filename+"&file_user="+file_user
+		})
+		.then(response => {
+			if (response.ok) {
+			   return response.json();
+			}
+		})
+		.then(resp=>{
+			$("#div_save").empty();			
+			if (resp.status=="KO") {
+				alert("Problemi occorsi durante il salvataggio.\n\nDettagli:\n"+resp.message);
+				return false;
+			}
+			close_doc.tipo="refresh"
+		})
+		.catch(status, err => {
+			return console.log(status, err);
+		})	
+	
+	
+	},1000);	
+}
