@@ -138,9 +138,10 @@ public function __construct()
 			$annoref=substr($periodo,7);
 			
 			$schemi=DB::table('schemi as s')
-			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'))
-			->join('documenti as d','d.id_schema','s.id')
-			->where('s.periodo','like',"%$annoref%")
+			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'));
+			if (strlen($azienda)!=0) 
+				$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
+			$schemi=$schemi->where('s.periodo','like',"%$annoref%")
 			->when($ref_user!="all", function ($schemi) use ($ref_user) {
 				return $schemi->where('s.id_funzionario','=',$ref_user);
 			})			
@@ -149,20 +150,24 @@ public function __construct()
 			})
 			->groupBy('s.id_categoria')
 			->groupBy('s.id_attivita')
-			->groupBy('s.id_settore')
-			->get();
+			->groupBy('s.id_settore');
+			
+			
 						
 		} else {
 			$schemi=DB::table('schemi as s')
-			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
-			->join('documenti as d','d.id_schema','s.id')
+			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore');
+			if (strlen($azienda)!=0) 
+				$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
+			$schemi=$schemi->where('s.periodo','=',$periodo)
 			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
 				return $schemi->where('d.azienda','=',$azienda);
 			})			
-			->where('s.periodo','=',$periodo)
-			->where('s.id_funzionario','=',$ref_user)
-			->get();
+			->where('s.id_funzionario','=',$ref_user);
+			
 		}
+
+		$schemi=$schemi->get();
 		
 		foreach($schemi as $schema) {
 			$id_cat=$schema->id_cat;
@@ -283,7 +288,7 @@ public function __construct()
 		$table="anagrafe.t2_tosc_a";
 		$elenco = DB::table($table)
 		->select('denom as azienda','c2 as id_fiscale')
-		->where('attivi', "=","S")
+		//->where('attivi', "=","S")
 		->whereRaw('LENGTH(denom) > ?', [0])
 		->groupBy('azienda')
 		->orderBy('azienda')->get();
