@@ -42,6 +42,13 @@ scratch. This page gets rid of all links and provides the needed markup only.
 			<button type="button" class="btn btn-primary btn-sm">Homepage</button>	
 		</a>
       </li>
+	  <li class="nav-item  d-sm-inline-block">
+		<a href="{{ route('documenti_utili') }}" class="nav-link">
+			<button type="button" class="btn btn-success btn-sm">Documenti Utili</button>	
+		</a>
+		</li>	
+
+
 	  <!--
       <li class="nav-item d-none d-sm-inline-block">
         <a href="#" class="nav-link">Contact</a>
@@ -153,6 +160,12 @@ scratch. This page gets rid of all links and provides the needed markup only.
   
   
    @extends('all_views.viewmaster.sidemenu')
+	
+	
+
+
+     
+    
 
    <center>Sviluppo prototipale by <b>Custom Software</b></center>
    @yield('content_main')  
