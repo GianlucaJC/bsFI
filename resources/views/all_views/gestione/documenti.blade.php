@@ -75,7 +75,10 @@
 									{{ $documento->created_at}}
 								</td>
 								<td>
-									{{ $utenti[$documento->id_funzionario] }}
+									<?php 
+										if (isset($utenti[$documento->id_funzionario] ))
+											echo $utenti[$documento->id_funzionario];
+									?>
 								</td>
 								<td>
 									{{ $documento->periodo }}
@@ -84,10 +87,17 @@
 									{{ $categorie[$documento->id_categoria] }}
 								</td>	
 								<td>
-									{{ $attivita[$documento->id_attivita] }}
+									<?php
+									 if (isset($attivita[$documento->id_attivita]))
+										echo $attivita[$documento->id_attivita];
+									?>
 								</td>	
 								<td>
-									{{ $settori[$documento->id_settore]['settore'] }}
+									<?php
+										if (isset($settori[$documento->id_settore]['settore']))
+											echo $settori[$documento->id_settore]['settore'];
+									?>	
+											 
 								</td>	
 								<td>
 									{{ $documento->azienda }}

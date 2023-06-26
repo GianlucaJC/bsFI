@@ -398,7 +398,7 @@ public function __construct()
 		$categorie=$this->cat_index();
 		$settori=$this->settori();		
 		
-		if ($this->tipouser==1) {
+		if ($this->tipouser==1 || 1==1) {
 			$documenti=DB::table('documenti as d')
 			->select('d.*')
 			->where('d.dele','=',0)
@@ -409,7 +409,7 @@ public function __construct()
 			->where("id_user","=",$this->id_user)
 			->get();
 			
-			$documenti = documenti::select("*")
+			$documenti = DB::table('documenti as d')
 			->where('d.dele','=',0)
 			->where(function($query) use($aziende){
 				foreach ($aziende as $azienda) {

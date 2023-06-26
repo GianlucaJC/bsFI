@@ -115,7 +115,7 @@
 				</div>
 			</div>
 			<input type='hidden' name='azienda' id='azienda' value='{{$azienda}}'>
-			@if ($user->hasRole('admin'))
+			@if ($user->hasRole('admin') || 1==1)
 				
 				<div class="col-md-6">
 					<div class="form-floating mb-3 mb-md-0">
@@ -164,7 +164,7 @@
 					<label for="periodo1">Periodo Confronto</label>
 				</div>
 			</div>
-			@if ($user->hasRole('admin'))
+			@if ($user->hasRole('admin') || 1==1)
 				<div class="col-md-6">
 					<div class="form-floating mb-3 mb-md-0">
 						<select class="form-select" id="funzionario1" aria-label="Funzionario1" name='funzionario1' onchange="$('#frm_dash').submit();" placeholder="Funzionario1">

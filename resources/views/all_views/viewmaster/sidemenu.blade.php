@@ -43,7 +43,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 		
-			@if ($user->hasRole('admin'))
+			
 			  
 				 <li class="nav-item">
 					  <li class="nav-item">
@@ -54,12 +54,14 @@
 					  </li>
 				  </li>	
 		  
+			@if ($user->hasRole('admin'))
 				  <li class="nav-item">
 					<a href="{{route('definizione_utenti')}}" class="nav-link">
 					  <i class="far fa-circle nav-icon"></i>
 					  <p>Definizione Utenti</p>
 					</a>
 				  </li>
+			  
 
 				  <li class="nav-item">
 					<a href="{{route('definizione_attivita')}}" class="nav-link">
@@ -86,9 +88,8 @@
 					</a>
 				  </li>
 			  </li>
+			@endif	  
 
-
-			@endif 
           
 			<li class="nav-item">
 				<li class="nav-item">
@@ -125,7 +126,7 @@
 		  </ul>
 		  </div>
 		  
-		  @if ($user->hasRole('admin'))
+		  @if ($user->hasRole('admin') || 1==1)
 			<div class="user-panel mt-3 pb-3 mb-3 d-flex">
 			<form method="POST" action="{{ route('dashboard') }}">
 				<input type='hidden' name='oper_sel' id='oper_sel'>
