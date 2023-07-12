@@ -201,6 +201,12 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 						html=view_form()
 						
 						$("#bodyvalue").html(html)
+						
+						$('.aziende').select2({
+							dropdownParent: $('#modalvalue')
+						});	
+						
+						
 						/*
 						$(".campi").empty();
 						$.each(JSON.parse(data), function (i, item){
@@ -406,8 +412,8 @@ function view_form() {
 	html+="</div>";	
 	html+="<div class='row mb-2'>";	
 		html+="<div class='col-sm-4'>";
-			html+="<div class='form-floating mb-3 mb-md-0'>";
-				html+="<select class='form-select aziende' id='list_aziende_e' aria-label='list_aziende_e' name='list_aziende_e' onchange='imposta_a(1)'>";
+			//html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-control aziende select2' id='list_aziende_e' aria-label='list_aziende_e' name='list_aziende_e' onchange='imposta_a(1)'>";
 					html+="<option value=''>Select...</option>";		
 					$.each(aziende_e, function (i, item) {
 
@@ -416,12 +422,12 @@ function view_form() {
 				
 				html+="</select>";
 				html+="<label for='list_aziende_e'>Azienda Edile</label>";
-			html+="</div>";
+			//html+="</div>";
 		html+="</div>";
 		
 		html+="<div class='col-sm-4'>";
-			html+="<div class='form-floating mb-3 mb-md-0'>";
-				html+="<select class='form-select aziende' id='list_aziende_fissi' aria-label='list_aziende_fissi' name='list_aziende_fissi' onchange='imposta_a(2)'>";
+			//html+="<div class='form-floating mb-3 mb-md-0'>";
+				html+="<select class='form-control aziende select2' id='list_aziende_fissi' aria-label='list_aziende_fissi' name='list_aziende_fissi' onchange='imposta_a(2)'>";
 					html+="<option value=''>Select...</option>";		
 					$.each(aziende_fissi, function (i, item) {
 
@@ -430,11 +436,11 @@ function view_form() {
 				
 				html+="</select>";
 				html+="<label for='list_aziende_fissi'>Azienda Imp.Fissi</label>";
-			html+="</div>";
+			//html+="</div>";
 		html+="</div>";	
 		
 		html+="<div class='col-sm-4'>";
-			html+="<div class='form-floating mb-3 mb-md-0'>";
+			//html+="<div class='form-floating mb-3 mb-md-0'>";
 				html+="<select class='form-select aziende' id='list_aziende_custom' aria-label='list_aziende_custom' name='list_aziende_custom' onchange='imposta_a(3)'>";
 					html+="<option value=''>Select...</option>";		
 					$.each(aziende_custom, function (i, item) {
@@ -444,7 +450,7 @@ function view_form() {
 				
 				html+="</select>";
 				html+="<label for='list_aziende_custom'>Azienda definita</label>";
-			html+="</div>";
+			//html+="</div>";
 		html+="</div>";			
 		
 
@@ -468,11 +474,13 @@ function view_form() {
 	
 	html+="<div id='div_step2' class='mt-3'></div>";
 	html+="<div id='div_step3' class='mt-2'></div>";
+
 	return html	
 	
 }
 
 function step2(value) {
+	
 	periodo=$("#periodo").val();
 	azienda=$("#azienda").val()
 	id_settore=$("#list_settori").val();

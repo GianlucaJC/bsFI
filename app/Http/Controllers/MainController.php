@@ -50,14 +50,18 @@ public function __construct()
 		
 		$confr=$request->input("confr");
 		$periodo=$request->input("periodo");
+		
+		if ($request->input("periodo")==null) $periodo=$this->current_period();
 		$per_sel="";
 		if ($request->has("per_sel")) {
 			$per_sel=$request->input("per_sel"); //in sidemenu
 			if (!$request->has("periodo")) $periodo=$per_sel;
 		}
 		if ($request->has("periodo")) $per_sel=$periodo;
+
 		
 		$funzionario=$request->input("funzionario"); //in dashboard
+		if ($request->input("funzionario")==null) $funzionario=Auth::user()->id;;
 		$oper_sel=0;
 		if ($request->has("oper_sel")) {
 			$oper_sel=$request->input("oper_sel"); //in sidemenu
@@ -134,23 +138,38 @@ public function __construct()
 		}	
 
 		$resp=array();
-		if (substr($periodo,0,7)=="Globale" || ($ref_user=="all")) {
-			$annoref=substr($periodo,7);
+		if (substr($periodo,0,7)=="Globale" || $ref_user=="all" ) {
+			$annoref="";
+			if (substr($periodo,0,7)=="Globale")
+				 $annoref=substr($periodo,7);
 			
-			$schemi=DB::table('schemi as s')
-			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'));
-			if (strlen($azienda)!=0) 
-				$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
-			$schemi=$schemi->where('s.periodo','like',"%$annoref%")
-			->when($ref_user!="all", function ($schemi) use ($ref_user) {
-				return $schemi->where('s.id_funzionario','=',$ref_user);
-			})			
-			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
-				return $schemi->where('d.azienda','=',$azienda);
-			})
-			->groupBy('s.id_categoria')
-			->groupBy('s.id_attivita')
-			->groupBy('s.id_settore');
+			$test=0;
+			if ($test==1) DB::enableQueryLog();
+				$schemi=DB::table('schemi as s')
+				->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'));
+				if (strlen($azienda)!=0) 
+					$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
+				
+				if (strlen($annoref)!=0)
+					$schemi=$schemi->where('s.periodo','like',"%$annoref%");
+				else
+					$schemi=$schemi->where('s.periodo','=',$periodo);
+				
+				$schemi->when($ref_user!="all", function ($schemi) use ($ref_user) {
+					return $schemi->where('s.id_funzionario','=',$ref_user);
+				})			
+				->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
+					return $schemi->where('d.azienda','=',$azienda);
+				})
+				->groupBy('s.id_categoria')
+				->groupBy('s.id_attivita')
+				->groupBy('s.id_settore')
+				->get();
+			if ($test==1) {
+				$queries = DB::getQueryLog();
+				print_r($queries);
+				exit;
+			}
 			
 			
 						
@@ -162,8 +181,10 @@ public function __construct()
 			$schemi=$schemi->where('s.periodo','=',$periodo)
 			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
 				return $schemi->where('d.azienda','=',$azienda);
-			})			
-			->where('s.id_funzionario','=',$ref_user);
+			})		
+			->when($ref_user!="all", function ($schemi) use ($ref_user) {
+				return $schemi->where('s.id_funzionario','=',$ref_user);
+			});
 			
 		}
 
@@ -177,6 +198,24 @@ public function __construct()
 			$resp[$id_cat][$id_attivita][$id_settore]=$valore;
 		}
 		return $resp;
+	}
+	public function current_period() {
+		$annocur=intval(date("Y"));
+		$mesecur=intval(date("m"));
+		if ($mesecur==1) $per="GEN";
+		if ($mesecur==2) $per="FEB";
+		if ($mesecur==3) $per="MAR";
+		if ($mesecur==4) $per="APR";
+		if ($mesecur==5) $per="MAG";
+		if ($mesecur==6) $per="GIU";
+		if ($mesecur==7) $per="LUG";
+		if ($mesecur==8) $per="AGO";
+		if ($mesecur==9) $per="SET";
+		if ($mesecur==10) $per="OTT";
+		if ($mesecur==11) $per="NOV";
+		if ($mesecur==12) $per="DIC";
+		$cur=$per.trim($annocur);
+		return $cur;
 	}
 	
 	public function periodi() {

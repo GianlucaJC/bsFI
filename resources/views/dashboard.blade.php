@@ -10,7 +10,9 @@
 
 @section('title', 'FirenzeRENDICONTA')
 
-@section('extra_style')  
+@section('extra_style') 
+  <link rel="stylesheet" href="{{ URL::asset('/') }}plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ URL::asset('/') }}plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"> 
  <!-- per upload -->
   <link href="{{ URL::asset('/') }}dist/css/upload/jquery.dm-uploader.min.css" rel="stylesheet">
   <!-- per upload -->  
@@ -245,7 +247,7 @@
 								echo "</b></td>";
 								
 								foreach($settori as $id_settore=>$v) {
-									$js_view=" onclick=\"view_row($ref_user,'$periodo',$categoria,$id_attivita,$id_settore);\"";
+									$js_view=" onclick=\"view_row('$ref_user','$periodo',$categoria,$id_attivita,$id_settore);\"";
 									
 									echo "<td style='text-align:center'>";
 									  echo "<a href='javascript:void(0)' class='text-muted' $js_view>";
@@ -323,6 +325,8 @@
 ?>
 
 
+               
+
 <!-- Modal -->
 <div class="modal fade bd-example-modal-lg" id="modalvalue" tabindex="-1" role="dialog" aria-labelledby="title_doc" aria-hidden="true">
   <div class="modal-dialog modal-lg">
@@ -361,9 +365,10 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.349"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.367"></script>
 
-	
+	<!--select2 !-->
+	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
 	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.300"></script>

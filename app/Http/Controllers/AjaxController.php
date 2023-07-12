@@ -234,14 +234,23 @@ class AjaxController extends Controller
 	function inforow(Request $request) {
 		$ref_user=$request->input("ref_user");
 		$periodo=$request->input("periodo");
+		$annoref="";
+		if (substr($periodo,0,4)=="Glob") $annoref=substr($periodo,7,4);
 		$id_categoria=$request->input("id_categoria");
 		$id_attivita=$request->input("id_attivita");
 		$id_settore=$request->input("id_settore");
 
 		$inforow = DB::table("documenti")
 		->select("id",DB::raw("DATE_FORMAT(documenti.periodo_data,'%d-%m-%Y') as periodo_data"),'filename','file_user','url_completo','azienda')
-		->where('id_funzionario', "=",$ref_user)
-		->where('periodo', "=",$periodo)
+		->when(strlen($ref_user)!=0 && $ref_user!="all", function ($inforow) use ($ref_user) {
+			return $inforow->where('id_funzionario','=',$ref_user);
+		})			
+		->when(strlen($annoref)==0, function ($inforow) use ($periodo) {
+			return $inforow->where('periodo','=',$periodo);
+		})			
+		->when(strlen($annoref)!=0, function ($inforow) use ($annoref) {
+			return $inforow->where('periodo','like',"%$annoref%");
+		})
 		->where('id_categoria', "=",$id_categoria)
 		->where('id_attivita', "=",$id_attivita)
 		->where('id_settore', "=",$id_settore)
