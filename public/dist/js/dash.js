@@ -83,7 +83,10 @@ function delerowcant(id_doc) {
 }
 
 
-function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore) {
+function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore,azienda) {
+	if (azienda.length!=0) {
+		alert("Attenzione, quando si seleziona un'azienda nonostante vengano filtrati tutti i documenti relativi, cliccando sul numero saranno comunque mostrati tutti i documenti a prescindere dall'azienda scelta");
+	}
 	html=""
 	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
 	

@@ -67,6 +67,12 @@ class AjaxController extends Controller
 		$id_categoria=$request->input("id_categoria");
 		$id_attivita=$request->input("id_attivita");
 
+		/*
+			12.07.2023
+			Prima di questa data utilizzavo il campo 'valore' per tener
+			traccia del 'numeratore' ossia un contatore dei documenti per periodo-id_categoria-id_attivita e quindi ad ogni inserimento o cancellazione aggiornavo questo campo che poi mostravo.
+			Per dei problemi nelle query (soprattutto in caso di riepilogo con uso di SUM), ho preferito, per il conteggio, usare la join con documenti e contare i record restituiti (vedi MainController function schema)
+		*/
 		$schema = DB::table("schemi")
 		->select('id_settore','valore')
 		->where('id_funzionario', "=",$ref_user)
@@ -118,6 +124,7 @@ class AjaxController extends Controller
 		$schemi->id_categoria=$id_categoria;
 		$schemi->id_attivita=$id_attivita;
 		$schemi->id_settore=$id_settore;
+		//per il campo 'valore' vedi nota scritta in function setvalue
 		if (!isset($id_ref[0]->id)) 
 			$schemi->valore=1;
 		else
@@ -269,6 +276,7 @@ class AjaxController extends Controller
 		//devo risalire, tramite id del doc, all'id dello schema
 		//non direttamente ma con altre variabili
 		
+		//per il campo 'valore' vedi nota scritta in function setvalue
 		$id_funzionario=$info_doc[0]->id_funzionario;
 		$periodo=$info_doc[0]->periodo;
 		$id_categoria=$info_doc[0]->id_categoria;

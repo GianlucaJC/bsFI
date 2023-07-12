@@ -106,6 +106,7 @@ public function __construct()
 		$categorie=$this->cat_index();
 		$settori=$this->settori();
 		$schema=$this->schema($request,1,$funzionario,$azienda,$periodo);
+		
 		$schema1=$this->schema($request,2,$funzionario,$azienda,$periodo);
 
 		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti)->with('oper_sel',$oper_sel)->with('azi_sel',$azi_sel)->with('azienda',$azienda)->with('per_sel',$per_sel);
@@ -137,65 +138,48 @@ public function __construct()
 			if ($tipo==2) $ref_user=$funzionario1;
 		}	
 
+		$test=0;
+		if ($test==1) DB::enableQueryLog();
+		
 		$resp=array();
-		if (substr($periodo,0,7)=="Globale" || $ref_user=="all" ) {
-			$annoref="";
-			if (substr($periodo,0,7)=="Globale")
-				 $annoref=substr($periodo,7);
-			
-			$test=0;
-			if ($test==1) DB::enableQueryLog();
-				$schemi=DB::table('schemi as s')
-				->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore',DB::raw('SUM(valore) AS valore'));
-				if (strlen($azienda)!=0) 
-					$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
-				
-				if (strlen($annoref)!=0)
-					$schemi=$schemi->where('s.periodo','like',"%$annoref%");
-				else
-					$schemi=$schemi->where('s.periodo','=',$periodo);
-				
-				$schemi->when($ref_user!="all", function ($schemi) use ($ref_user) {
-					return $schemi->where('s.id_funzionario','=',$ref_user);
-				})			
-				->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
-					return $schemi->where('d.azienda','=',$azienda);
-				})
-				->groupBy('s.id_categoria')
-				->groupBy('s.id_attivita')
-				->groupBy('s.id_settore')
-				->get();
-			if ($test==1) {
-				$queries = DB::getQueryLog();
-				print_r($queries);
-				exit;
-			}
-			
-			
-						
-		} else {
-			$schemi=DB::table('schemi as s')
-			->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore');
-			if (strlen($azienda)!=0) 
-				$schemi=$schemi->join('documenti as d','d.id_schema','s.id');
-			$schemi=$schemi->where('s.periodo','=',$periodo)
-			->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
-				return $schemi->where('d.azienda','=',$azienda);
-			})		
-			->when($ref_user!="all", function ($schemi) use ($ref_user) {
-				return $schemi->where('s.id_funzionario','=',$ref_user);
-			});
-			
-		}
+		$annoref="";
+		if (substr($periodo,0,7)=="Globale") $annoref=substr($periodo,7);
+
+		$schemi=DB::table('schemi as s')
+		->select('s.id','s.dele','s.id_categoria as id_cat','s.id_attivita','s.id_settore','s.valore')
+		->join('documenti as d','d.id_schema','s.id');
+		if (strlen($annoref)!=0)
+			$schemi=$schemi->where('s.periodo','like',"%$annoref%");
+		else
+			$schemi=$schemi->where('s.periodo','=',$periodo);
+		
+		$schemi->when(strlen($azienda)!=0, function ($schemi) use ($azienda) {
+			return $schemi->where('d.azienda','=',$azienda);
+		})		
+		->when($ref_user!="all", function ($schemi) use ($ref_user) {
+			return $schemi->where('s.id_funzionario','=',$ref_user);
+		});
+
 
 		$schemi=$schemi->get();
+		
+		if ($test==1) {
+			$queries = DB::getQueryLog();
+			print_r($queries);
+			
+		}		
+		
 		
 		foreach($schemi as $schema) {
 			$id_cat=$schema->id_cat;
 			$id_attivita=$schema->id_attivita;
 			$id_settore=$schema->id_settore;
 			$valore=$schema->valore;
-			$resp[$id_cat][$id_attivita][$id_settore]=$valore;
+
+			if (!isset($resp[$id_cat][$id_attivita][$id_settore]))
+				$resp[$id_cat][$id_attivita][$id_settore]=1;
+			else
+				$resp[$id_cat][$id_attivita][$id_settore]++;
 		}
 		return $resp;
 	}
