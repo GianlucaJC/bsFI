@@ -28,6 +28,10 @@ Route::group(['only_log' => ['auth']], function () {
 
 	Route::post('documenti_utili', [ 'as' => 'documenti_utili', 'uses' => 'App\Http\Controllers\MainController@documenti_utili']);
 
+	Route::get('categorie_documenti', [ 'as' => 'categorie_documenti', 'uses' => 'App\Http\Controllers\ControllerArchivi@categorie_documenti']);
+
+	Route::post('categorie_documenti', [ 'as' => 'categorie_documenti', 'uses' => 'App\Http\Controllers\ControllerArchivi@categorie_documenti']);
+
 
 	Route::get('assegnazioni', [ 'as' => 'assegnazioni', 'uses' => 'App\Http\Controllers\MainController@assegnazioni'])
 	->middleware(['role:admin']);

@@ -55,39 +55,56 @@
 				  </li>	
 		  
 			@if ($user->hasRole('admin'))
-				  <li class="nav-item">
-					<a href="{{route('definizione_utenti')}}" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Definizione Utenti</p>
+				<li class="nav-item menu">
+					<a href="#" class="nav-link">
+					  <i class="nav-icon fas fa-users"></i>
+					  <p>Gestione archivi
+						<i class="right fas fa-angle-left"></i>
+					  </p>
 					</a>
-				  </li>
-			  
-
-				  <li class="nav-item">
-					<a href="{{route('definizione_attivita')}}" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Definizione attività</p>
-					</a>
-				  </li>
-				  
-				  <li class="nav-item">
+					<ul class="nav nav-treeview">
 					  <li class="nav-item">
-						<a href="{{route('aziende')}}" class="nav-link">
+						<a href="{{route('definizione_utenti')}}" class="nav-link">
 						  <i class="far fa-circle nav-icon"></i>
-						  <p>Gestione Aziende</p>
+						  <p>Definizione Utenti</p>
 						</a>
 					  </li>
-				  </li>
 				  
 
-			  <li class="nav-item">
-				  <li class="nav-item">
-					<a href="{{route('assegnazioni')}}" class="nav-link">
-					  <i class="far fa-circle nav-icon"></i>
-					  <p>Assegnazioni</p>
-					</a>
-				  </li>
-			  </li>
+					  <li class="nav-item">
+						<a href="{{route('definizione_attivita')}}" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>Definizione attività</p>
+						</a>
+					  </li>
+					  
+					  <li class="nav-item">
+						<a href="#" class="nav-link">
+						  <i class="far fa-circle nav-icon"></i>
+						  <p>Categorie Documenti</p>
+						</a>
+					  </li>
+
+					  <li class="nav-item">
+						  <li class="nav-item">
+							<a href="{{route('aziende')}}" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>Gestione Aziende</p>
+							</a>
+						  </li>
+					  </li>
+					  
+
+					  <li class="nav-item">
+						  <li class="nav-item">
+							<a href="{{route('assegnazioni')}}" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>Assegnazioni</p>
+							</a>
+						  </li>
+					  </li>
+					</ul>  
+				</li>
 			@endif	  
 
           

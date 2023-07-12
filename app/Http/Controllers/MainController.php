@@ -133,10 +133,10 @@ public function __construct()
 		if ($this->tipouser==1 && strlen($funzionario)==0) return array();
 		$ref_user=$this->id_user;
 
-		if ($this->tipouser==1) {
+		//if ($this->tipouser==1) {
 			if ($tipo==1) $ref_user=$funzionario;
 			if ($tipo==2) $ref_user=$funzionario1;
-		}	
+		//}	
 
 		$test=0;
 		if ($test==1) DB::enableQueryLog();
