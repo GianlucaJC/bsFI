@@ -83,13 +83,8 @@ public function __construct()
 		$periodo1=$request->input("periodo1");
 		$funzionario1=$request->input("funzionario1");
 
-		$ref_user=$this->id_user;
 		$num_noti=0;
-
-
-
-		if ($this->tipouser==1) $ref_user=$funzionario;
-
+		$ref_user=$this->id_user;
 		if (strlen($ref_user)>0) {
 			$notifiche=notifiche::select('notifiche')
 			->where("id_user","=",$ref_user)
@@ -98,6 +93,14 @@ public function __construct()
 				$num_noti=$notifiche[0]->notifiche;
 			}	
 		}
+		//if ($this->tipouser==1) 
+		$ref_user=$funzionario;
+
+
+
+		
+
+
 
 
 		$users=user::select('id','name')->orderBy('name')->get();
