@@ -45,6 +45,18 @@ class AjaxController extends Controller
 	}
 	
 
+	function load_sc(Request $request) {
+		$id_categ=$request->input("id_categ");
+
+		$risp = DB::table("sotto_cat_doc_utili")
+		->select('id','descrizione')
+		->where('dele', "=",0)
+		->where('id_categoria', "=",$id_categ)
+		->orderBy('descrizione')
+		->get();
+		echo json_encode($risp);
+		
+	}
 	
 	function delerowcant(Request $request) {
 		$id_doc=$request->input("id_doc");
@@ -218,6 +230,7 @@ class AjaxController extends Controller
 		$ref_user=Auth::user()->id;	
 		$filename=$request->input("filename");
 		$file_user=$request->input("file_user");
+		$categ=$request->input("categ");
 		$url_completo="allegati/documenti_utili/$filename";
 
 		
@@ -227,6 +240,7 @@ class AjaxController extends Controller
 		$documenti->filename=$filename;
 		$documenti->file_user=$file_user;
 		$documenti->url_completo=$url_completo;
+		$documenti->id_categoria=$categ;
 		$documenti->save();
 			
 		$risp=array();

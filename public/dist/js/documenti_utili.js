@@ -62,7 +62,7 @@ $(document).ready( function () {
 function newdoc() {
 	html=""
 	html+="<center><div class='spinner-border text-secondary' role='status'></div></center>";
-	$("#title_doc").html("Nuovo documento per il cantiere")
+	$("#title_doc").html("Nuovo documento utile")
 	$("#bodyvalue").html(html)
 	$("#div_save").empty()
 	$('#modalvalue').modal('show')	

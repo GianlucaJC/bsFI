@@ -25,13 +25,13 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">TIPOLOGIE DI ATTIVITA'</h1>
+            <h1 class="m-0">CATEGORIE DOCUMENTI</h1>
           </div><!-- /.col -->
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-			  <li class="breadcrumb-item">Archivi</li>
-              <li class="breadcrumb-item active">Tipologie Attività</li>
+			  <li class="breadcrumb-item">Gestione Archivi</li>
+              <li class="breadcrumb-item active">Categorie Documenti</li>
             </ol>
           </div><!-- /.col -->
         </div><!-- /.row -->
@@ -45,57 +45,54 @@
       <div class="container-fluid">
 		<!-- form new voce attestato !-->	
 		
-		@include('all_views.gestione.newattivita')
+		@include('all_views.gestione.new_sottocategoria')
 		
 		 
 
-		<form method='post' action="{{ route('definizione_attivita') }}" id='frm_attivita' name='frm_attivita' autocomplete="off">
+		<form method='post' action="{{ route('categorie_documenti') }}" id='frm_categ' name='frm_categ' autocomplete="off">
 			<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
 
-
+		<input type="hidden" value="{{url('/')}}" id="url" name="url">
         <div class="row">
           <div class="col-md-12">
 		  
 				<table id='tbl_list_attivita' class="display">
 					<thead>
 						<tr>
-							<th>ID</th>
 							<th>Categoria</th>
-							<th>Descrizione</th>
+
 							<th>Operazioni</th>
 						</tr>
 					</thead>
 					<tbody>
-						@foreach($definizione_attivita as $attivita)
+						@foreach($cat_doc_utili as $info)
 							<tr>
-								<td>{{ $attivita->id }}</td>
+								
+
 								<td>
-									<span id='id_categ{{$attivita->id}}' data-descr='{{ $attivita->ref_categoria }}'>
-										{{ $attivita->categoria }}
-									</span>										
-								</td>
-								<td>
-								 @if ($attivita->dele=="1") 
-									<font color='red'><del> 
-								 @endif
-									<span id='id_descr{{$attivita->id}}' data-descr='{{ $attivita->descrizione }}'>
-										{{ $attivita->descrizione }}
-									</span>	
-								 @if ($attivita->dele=="1") 
-									 </del></font>
-								 @endif	
+									<span id='id_categ{{$info->id}}' data-descr='{{ $info->categoria }}'></span>
+									 @if ($info->dele=="1") 
+										<font color='red'><del> 
+									 @endif
+											{{ $info->categoria }}
+									 @if ($info->dele=="1") 
+										 </del></font>
+									 @endif	
 								</td>	
+								
+	
+
 								<td>
-									@if ($attivita->dele=="0") 
-										<a href='#' onclick="edit_elem({{$attivita->id}})">
+									@if ($info->dele=="0") 
+										<a href='#' onclick="edit_elem({{$info->id}})">
 											<button type="button" class="btn btn-info" alt='Edit'><i class="fas fa-edit"></i></button>
 										</a>
-										<a href='#' onclick="dele_element({{$attivita->id}})">
+										<a href='#' onclick="dele_element({{$info->id}})">
 											<button type="submit" name='dele_ele' class="btn btn-danger"><i class="fas fa-trash"></i></button>	
 										</a>
 									@endif
-									@if ($attivita->dele=="1") 
-										<a href='#'onclick="restore_element({{$attivita->id}})" >
+									@if ($info->dele=="1") 
+										<a href='#'onclick="restore_element({{$info->id}})" >
 											<button type="submit" class="btn btn-warning" alt='Restore'><i class="fas fa-trash-restore"></i></button>
 										</a>
 									@endif
@@ -108,9 +105,8 @@
 					</tbody>
 					<tfoot>
 						<tr>
-							<th>ID</th>
 							<th>Categoria</th>
-							<th>Descrizione</th>
+
 							<th></th>
 						</tr>
 					</tfoot>					
@@ -129,10 +125,10 @@
 			<div class="row">
 			    <div class="col-lg-12">
 					<button type="button" class="btn btn-primary" onclick="$('#edit_elem').val('');$('#descr_contr').val('');$('#div_definition').show(150)">
-						<i class="fa fa-plus-circle"></i> Nuova definizione
+						<i class="fa fa-plus-circle"></i> Nuova categoria
 					</button>
 					<div class="form-check form-switch mt-3 ml-3">
-					  <input class="form-check-input" type="checkbox" id="view_dele" name="view_dele" onchange="$('#frm_attivita').submit()" {{ $check }}>
+					  <input class="form-check-input" type="checkbox" id="view_dele" name="view_dele" onchange="$('#frm_categ').submit()" {{ $check }}>
 					  <label class="form-check-label" for="view_dele">Mostra anche definizioni eliminate</label>
 					</div>
 				</div>
@@ -171,6 +167,6 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/attivita.js?ver=1.4"></script>
+	<script src="{{ URL::asset('/') }}dist/js/categorie_documenti.js?ver=1.540"></script>
 
 @endsection

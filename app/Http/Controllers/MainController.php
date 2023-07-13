@@ -470,12 +470,19 @@ public function __construct()
 			$doc_remove=$doc->url_completo;
 			@unlink($doc_remove);
 		}		
-			
-		$documenti_utili = documenti_utili::select("*")
-		->where('dele','=',0)
-		->orderBy("created_at","desc")->get();
+		$documenti_utili = DB::table('documenti_utili as d')
+		->leftjoin('categorie_doc_utili as c','d.id_categoria','c.id')
+		->select('d.id','d.dele','d.id_funzionario','d.id_categoria','d.filename','d.file_user','d.url_completo','c.descrizione','d.created_at',)
+		->where('d.dele','=',0)
+		->orderBy("d.created_at","desc")->get();
 
-		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti);
+		$cat_doc_utili=DB::table('categorie_doc_utili as c')
+		->select('c.id','c.dele','c.descrizione')
+		->where('c.dele', "=","0")
+		->orderBy('c.descrizione')
+		->get();
+
+		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti)->with('cat_doc_utili',$cat_doc_utili);
 	}
 
 

@@ -275,6 +275,11 @@ function saveinfodoc() {
 		alert("Definire un nome per l'allegato da inviare al server!");
 		return false
 	}
+	categ=$("#categ").val()
+	if (categ.length==0) {
+		alert("Definire una categoria di riferimento!");
+		return false
+	}
 
 	$("#btn_save").prop("disabled",true);
 	base_path = $("#url").val();
@@ -291,7 +296,7 @@ function saveinfodoc() {
 			headers: {
 			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 			},
-			body: '_token='+ CSRF_TOKEN+'&filename='+saveinfodoc.filename+"&file_user="+file_user
+			body: '_token='+ CSRF_TOKEN+'&filename='+saveinfodoc.filename+"&file_user="+file_user+"&categ="+categ
 		})
 		.then(response => {
 			if (response.ok) {

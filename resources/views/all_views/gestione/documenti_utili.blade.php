@@ -63,6 +63,7 @@
 							<th>Data ora</th>
 							<th>Utente</th>
 							<th>Documento</th>
+							<th>Categoria</th>
 							<th>Elimina</th>
 						</tr>
 					</thead>
@@ -87,6 +88,9 @@
 									</a>
 								</td>
 								<td>
+									{{ $documento->descrizione }}
+								</td>
+								<td>
 									<a href='#' onclick="dele_element({{$documento->id}})">
 										<button type="submit" name='dele_ele' class="btn btn-danger"><i class="fas fa-trash"></i></button>	
 									</a>								
@@ -101,6 +105,7 @@
 							<th>Data ora</th>
 							<th>Utente</th>
 							<th>Documento</th>
+							<th>Categoria</th>
 							<th></th>
 						</tr>
 					</tfoot>					
@@ -132,6 +137,24 @@
       <div class="modal-body" id='bodyvalue'>
         ...
       </div>
+		<div class="modal-body">
+		
+			<div class="col-md-12">
+				<div class="form-floating mb-3 mb-md-0">
+					<select class="form-select" name="categ" id="categ" required>
+						<option value=''>Select...</option>
+						@foreach($cat_doc_utili as $categoria)
+							<option value='{{ $categoria->id }}'> 	
+							{{ $categoria->descrizione}}</option>	
+						@endforeach					
+					
+					</select>
+					<label for="categ">Categoria di riferimento*</label>
+				</div>
+			</div>
+		
+		</div>
+					
 	  <div id='div_wait' class='mb-3'></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" id='btn_close' onclick='close_doc()'>Chiudi</button>
@@ -168,11 +191,11 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.56"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.58"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
 	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.301"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.394"></script>		
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.395"></script>		
 
 @endsection
