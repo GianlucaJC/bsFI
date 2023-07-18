@@ -16,14 +16,14 @@ function set_class_allegati() {
   	
 	
 	/*
-		I seguenti dati provengono dal file dash.js (o da documenti_utili.js o da qualiasi altro js che ne abbia bisogno) che li preimposta.
+		I seguenti dati provengono dal file dash.js (o da documenti_utili.js, aziende.js o da qualiasi altro js che ne abbia bisogno) che li preimposta.
 		A seconda di come viene valorizzato [from] si predispongono
 		una serie di variabili da passare via Ajax tramite la function saveinfo() o saveinfocant() o altre function che si vogliono aggiungere.
 		Queste function vengono invocate da bottoni 'salva', creati (da dash.js) iniettando html nella finestra modal (in dashboard.blade.php) nel div_save
 	
 	*/
 	from=set_class_allegati.from
-	
+
 	if (from=="allegati") {
 		file_user=set_class_allegati.file_user
 		ref_user=set_class_allegati.ref_user
@@ -54,6 +54,20 @@ function set_class_allegati() {
 		}
 	}
 
+	if (from=="allegati_aziende") {
+		
+		file_user=set_class_allegati.file_user
+		id_azienda=set_class_allegati.id_azienda
+		azienda=set_class_allegati.azienda
+
+
+		extraData= {
+		  "from":from,
+		  "id_azienda":id_azienda,
+		  "azienda":azienda,
+		}
+	}
+
 	if (from=="allegati_utili") {
 		file_user=set_class_allegati.file_user
 
@@ -61,6 +75,7 @@ function set_class_allegati() {
 		  "from":from
 		  }
 	}  
+
 
   base_path = $("#url").val();
 
@@ -138,6 +153,13 @@ function set_class_allegati() {
 		  saveinfocant.file_user=file_user
 		  saveinfocant.id_cantiere=id_cantiere
 		  close_doc.tipo="refresh"
+	  }
+
+	  if (from=="allegati_aziende") {
+		  saveinfoazi.filename=data.filename
+		  saveinfoazi.file_user=file_user
+		  saveinfoazi.id_azienda=set_class_allegati.id_azienda
+		  saveinfoazi.azienda=set_class_allegati.azienda
 	  }
 	  if (from=="allegati_utili") {
 		  saveinfodoc.filename=data.filename
@@ -310,6 +332,55 @@ function saveinfodoc() {
 				return false;
 			}
 			close_doc.tipo="refresh"
+		})
+		.catch(status, err => {
+			return console.log(status, err);
+		})	
+	
+	
+	},1000);	
+}
+
+function saveinfoazi() {
+	if( typeof saveinfoazi.filename == 'undefined' ) {
+		$("#btn_save").prop("disabled",true);
+		console.log("false");
+		return false
+	}	
+	file_user=$("#file_user").val()
+	if (file_user.length==0) {
+		alert("Definire un nome per l'allegato da inviare al server!");
+		return false
+	}
+
+	$("#btn_save").prop("disabled",true);
+	base_path = $("#url").val();
+	let CSRF_TOKEN = $("#token_csrf").val();
+	
+	html="<span role='status' aria-hidden='true' class='spinner-border spinner-border-sm'></span> Attendere...";
+
+	$("#div_save").html(html);
+	setTimeout(function(){
+	
+		fetch(base_path+'/update_file_azi', {
+			method: 'post',
+			//cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached		
+			headers: {
+			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+			},
+			body: '_token='+ CSRF_TOKEN+'&filename='+saveinfoazi.filename+"&file_user="+file_user+"&id_azienda="+saveinfoazi.id_azienda+"&azienda="+saveinfoazi.azienda
+		})
+		.then(response => {
+			if (response.ok) {
+			   return response.json();
+			}
+		})
+		.then(resp=>{
+			$("#div_save").empty();			
+			if (resp.status=="KO") {
+				alert("Problemi occorsi durante il salvataggio.\n\nDettagli:\n"+resp.message);
+				return false;
+			}
 		})
 		.catch(status, err => {
 			return console.log(status, err);

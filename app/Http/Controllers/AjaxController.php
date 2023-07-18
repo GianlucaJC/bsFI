@@ -8,6 +8,7 @@ use App\Models\schemi;
 use App\Models\documenti;
 use App\Models\documenti_cantiere;
 use App\Models\documenti_utili;
+use App\Models\documenti_azienda;
 use App\Models\notifiche;
 use App\Models\assegnazioni;
 use DB;
@@ -44,6 +45,21 @@ class AjaxController extends Controller
 		echo json_encode($inforow);		
 	}
 	
+	public function docinazienda(Request $request) {
+		$id_azienda=$request->input("id_azienda");
+		$id_a=$request->input("id_a");
+		$id_a=hash("md5", $id_a);
+		
+		$inforow = DB::table("documenti_azienda as d")
+		->select("d.id",'d.id_funzionario','u.name','d.created_at','d.filename','d.file_user','d.url_completo')
+		->join ("users as u","d.id_funzionario","u.id")
+		->where('id_azienda', "=",$id_azienda)
+		->orWhere('id_azienda', "=",$id_a)
+		->get();
+		if (isset($inforow[0])) $inforow[0]->user_log=Auth::user()->id;
+		echo json_encode($inforow);		
+	}	
+	
 
 	function load_sc(Request $request) {
 		$id_categ=$request->input("id_categ");
@@ -62,6 +78,20 @@ class AjaxController extends Controller
 		$id_doc=$request->input("id_doc");
 
 		$doc = documenti_cantiere::find($id_doc);	
+		$doc->delete();
+		$doc_remove=$doc->url_completo;
+		if (@unlink($doc_remove))
+			$risp['status']="OK";
+		else
+			$risp['status']="KO";
+		echo json_encode($risp);
+		
+	}
+
+	function delerowazi(Request $request) {
+		$id_doc=$request->input("id_doc");
+
+		$doc = documenti_azienda::find($id_doc);	
 		$doc->delete();
 		$doc_remove=$doc->url_completo;
 		if (@unlink($doc_remove))
@@ -251,6 +281,36 @@ class AjaxController extends Controller
 
 	}		
 	
+	
+	function update_file_azi(Request $request) {
+		
+		$ref_user=Auth::user()->id;	
+		$filename=$request->input("filename");
+		$file_user=$request->input("file_user");
+		$id_azienda=$request->input("id_azienda");
+		$azienda=$request->input("azienda");
+		if (strlen($id_azienda)==0) $id_azienda = hash("md5", $azienda);
+		$url_completo="allegati/aziende/$id_azienda/$filename";
+
+		
+		$documenti = new documenti_azienda;
+		$documenti->dele=0;
+		$documenti->id_funzionario=$ref_user;
+		$documenti->filename=$filename;
+		$documenti->azienda=$azienda;
+		$documenti->id_azienda=$id_azienda;
+		$documenti->file_user=$file_user;
+		$documenti->url_completo=$url_completo;
+
+		$documenti->save();
+			
+		$risp=array();
+
+		$risp['status']="OK";
+		$risp['esito']="insert";
+		echo json_encode($risp);
+
+	}			
 	
 	function inforow(Request $request) {
 		$ref_user=$request->input("ref_user");

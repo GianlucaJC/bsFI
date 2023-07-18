@@ -68,10 +68,12 @@ foreach($assegnazioni as $assegnazione) {
 	if ($old_us==0) $old_us=$id_user;
 	if ($old_us!=$id_user) $scx=0;
 	$user_az[$id_user][$scx]['azienda']=$assegnazione->azienda;
+
 	$user_az[$id_user][$scx]['id_fiscale']=$assegnazione->id_fiscale;
 	$scx++;
 	$old_us=$id_user;
 }
+
 ?>
 <!--
 <style>

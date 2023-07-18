@@ -61,6 +61,18 @@ try {
 		$sub="allegati/cantieri/$id_cantiere";
 		@mkdir($sub);
 	}
+
+	if ($from=="allegati_aziende") {
+		$id_azienda=$_POST['id_azienda'];
+		//eventuali caratteri contenuti da eliminare
+		$id_azienda = trim(preg_replace('/\s+/', ' ', $id_azienda));
+		
+		$azienda=$_POST['azienda'];
+		$azienda = trim(preg_replace('/\s+/', ' ', $azienda));
+		if (strlen($id_azienda)==0) $id_azienda = hash("md5", $azienda);
+		$sub="allegati/aziende/$id_azienda";
+		@mkdir($sub);
+	}
 	if ($from=="allegati_utili") {
 		$sub="allegati/documenti_utili";
 		@mkdir($sub);

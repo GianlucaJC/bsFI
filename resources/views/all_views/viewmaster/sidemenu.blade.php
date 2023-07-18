@@ -2,7 +2,7 @@
 @php 
 	use Illuminate\Support\Facades\Storage;
 	global $utenti;
-	global $user_az;
+	global $user_az; //vedi viewmaster.allpage
 	global $info_cantieri;
 	global $user;
 @endphp
@@ -126,6 +126,14 @@
 				</li>
 			</li>
 
+			<li class="nav-item">
+				<li class="nav-item">
+					<a href="{{route('documenti_azienda')}}" class="nav-link">
+						<i class="far fa-circle nav-icon"></i>
+						<p>Documenti aziende</p>
+					</a>
+				</li>
+			</li>
 	  
 		  <li class="nav-item">
 				<form method="POST" action="{{ route('logout') }}">
@@ -161,17 +169,20 @@
 						?>
 					</a>
 					<?php 
-					
+						
+						///$user_az valorizzato in viewmaster.allpage
 						$az="";
 						$vis="display:none";
 						if (isset($oper_sel) && $oper_sel==$info->id) $vis="";
 	
 						echo "<div id='div_az$num' style='$vis'>";
-						
+		
 						if (array_key_exists($info->id,$user_az)){
 							
 							for ($sca=0;$sca<=count($user_az[$info->id])-1;$sca++) {
 								$az=$user_az[$info->id][$sca]['azienda'];
+								$id_azienda=$user_az[$info->id][$sca]['id_fiscale'];
+								
 								$text="text-info";
 								if (isset($azi_sel) && $azi_sel==$az) $text="text-warning";
 								$js="";
@@ -182,6 +193,20 @@
 								echo "<a href='#' class='ml-4 nav-link p-1 $text' onclick=\"$js\">";
 									echo $az;
 								echo "</a>";
+
+								$path = "allegati/aziende/$id_azienda";
+								$id_a=hash("md5",$az);
+								$path1 = "allegati/aziende/$id_a";
+								
+								
+								if((File::isDirectory($path) && strlen($id_azienda)>0) || File::isDirectory($path1)){
+									echo "<a href='javascript:void(0)' onclick=\"docinazienda('$id_azienda','$az')\" class='d-inline ml-5 nav-link p-1'>";
+										echo "<i class='fas fa-folder'></i>";
+									echo "</a>";
+									$ml="";
+								}	
+
+
 								//$info->id;
 								
 							}

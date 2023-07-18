@@ -28,6 +28,12 @@ Route::group(['only_log' => ['auth']], function () {
 
 	Route::post('documenti_utili', [ 'as' => 'documenti_utili', 'uses' => 'App\Http\Controllers\MainController@documenti_utili']);
 
+
+	Route::get('documenti_azienda', [ 'as' => 'documenti_azienda', 'uses' => 'App\Http\Controllers\MainController@documenti_azienda']);
+
+	Route::post('documenti_azienda', [ 'as' => 'documenti_azienda', 'uses' => 'App\Http\Controllers\MainController@documenti_azienda']);
+
+
 	Route::get('categorie_documenti', [ 'as' => 'categorie_documenti', 'uses' => 'App\Http\Controllers\ControllerArchivi@categorie_documenti']);
 
 	Route::post('categorie_documenti', [ 'as' => 'categorie_documenti', 'uses' => 'App\Http\Controllers\ControllerArchivi@categorie_documenti']);
@@ -65,6 +71,8 @@ Route::group(['only_log' => ['auth']], function () {
 
 //routing Ajax
 Route::group(['only_log' => ['auth']], function () {
+	Route::post('docinazienda', [ 'as' => 'docinazienda', 'uses' =>'App\Http\Controllers\AjaxController@docinazienda']);	
+	Route::post('delerowazi', [ 'as' => 'delerowazi', 'uses' =>'App\Http\Controllers\AjaxController@delerowazi']);
 	Route::post('docincantiere', [ 'as' => 'docincantiere', 'uses' =>'App\Http\Controllers\AjaxController@docincantiere']);	
 	Route::post('delerowcant', [ 'as' => 'delerowcant', 'uses' =>'App\Http\Controllers\AjaxController@delerowcant']);
 	Route::post('update_doc_cant', [ 'as' => 'update_doc_cant', 'uses' =>'App\Http\Controllers\AjaxController@update_doc_cant']);
@@ -77,6 +85,8 @@ Route::group(['only_log' => ['auth']], function () {
 	Route::post('update_doc', [ 'as' => 'update_doc', 'uses' =>'App\Http\Controllers\AjaxController@update_doc']);
 
 	Route::post('update_doc_utili', [ 'as' => 'update_doc_utili', 'uses' =>'App\Http\Controllers\AjaxController@update_doc_utili']);
+
+	Route::post('update_file_azi', [ 'as' => 'update_file_azi', 'uses' =>'App\Http\Controllers\AjaxController@update_file_azi']);
 
 
 	Route::post('inforow', [ 'as' => 'inforow', 'uses' =>'App\Http\Controllers\AjaxController@inforow']);

@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\schemi;
 use App\Models\documenti;
 use App\Models\documenti_utili;
+use App\Models\documenti_azienda;
 use App\Models\aziende_custom;
 use App\Models\assegnazioni;
 use App\Models\notifiche;
@@ -484,6 +485,28 @@ public function __construct()
 
 		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti)->with('cat_doc_utili',$cat_doc_utili);
 	}
+	
+	public function documenti_azienda(Request $request) {
+		$users=user::select('id','name')->orderBy('name')->get();
+		$utenti=array();
+		foreach ($users as $us) {
+			$utenti[$us->id]=$us->name;
+		}
+		$dele_contr=$request->input("dele_contr");
+		
+		if (strlen($dele_contr)!=0) {
+			$doc = documenti_azienda::find($dele_contr);	
+			$doc->delete();
+			$doc_remove=$doc->url_completo;
+			@unlink($doc_remove);
+		}		
+		$documenti_azienda = DB::table('documenti_azienda as d')
+		->select('d.id','d.azienda','d.id_azienda','d.dele','d.id_funzionario','d.filename','d.file_user','d.url_completo','d.created_at',)
+		->where('d.dele','=',0)
+		->orderBy("d.created_at","desc")->get();
+
+		return view('all_views/gestione/documenti_azienda')->with('documenti_azienda', $documenti_azienda)->with('utenti',$utenti);
+	}	
 
 
 	public function assegnazioni(Request $request) {

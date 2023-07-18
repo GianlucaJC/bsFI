@@ -2,7 +2,13 @@
 
 @section('title', 'FirenzeRENDICONTA')
 @section('extra_style') 
-<!-- x button export -->
+  <link rel="stylesheet" href="{{ URL::asset('/') }}plugins/select2/css/select2.min.css">
+  <link rel="stylesheet" href="{{ URL::asset('/') }}plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css"> 
+
+ <!-- per upload -->
+  <link href="{{ URL::asset('/') }}dist/css/upload/jquery.dm-uploader.min.css" rel="stylesheet">
+  <!-- per upload -->  
+  <link href="{{ URL::asset('/') }}dist/css/upload/styles.css?ver=1.1" rel="stylesheet">  
 
 <link href="https://cdn.datatables.net/buttons/1.7.0/css/buttons.dataTables.min.css" rel="stylesheet">
 <!-- -->
@@ -52,13 +58,23 @@
 		
 		<div id="div_aziende">
 			<form method='post' action="{{ route('aziende') }}" id='frm_aziende_dele' name='frm_aziende_dele' autocomplete="off">
+				<input type="hidden" value="{{url('/')}}" id="url" name="url">
 				<input name="_token" type="hidden" value="{{ csrf_token() }}" id='token_csrf'>
 				<div class="row mb-2">
 				<input type='hidden' id='az_dele' name='az_dele'>
 
+				<div class="container-fluid mb-3">
+					<button type='button' id='btn_associa' class="btn btn-primary" onclick='add_doc()' disabled>Associa un documento all'azienda</button>
+					<div class="container mt-4">	
+						<div id='div_save'></div>
+					</div>
+				</div>	
+
+
+
 					<div class="col-md-4">
-						<div class="form-floating mb-3 mb-md-0">
-							<select class='form-select aziende' id='list_aziende_e' aria-label='list_aziende_e' name='list_aziende_e'>
+						
+							<select class='form-select aziende select2' id='list_aziende_e' aria-label='list_aziende_e' name='list_aziende_e' onchange="check_add(1)">
 								<option value=''>Select...</option>
 								@foreach($aziende_e as $az_e)
 									<option value='{{$az_e->id_fiscale}}'>
@@ -66,36 +82,31 @@
 								@endforeach
 							</select>
 							<label for='list_aziende_e'>Lista Aziende Edili</label>
-						</div>
+						
 					</div>
 
 					<div class="col-md-4">
-						<div class="form-floating mb-3 mb-md-0">
-							<select class='form-select aziende' id='list_aziende_fissi' aria-label='list_aziende_fissi' name='list_aziende_fissi'>
+							<select class='form-select aziende select2' id='list_aziende_fissi' aria-label='list_aziende_fissi' name='list_aziende_fissi'  onchange="check_add(2)">
 								<option value=''>Select...</option>
 								@foreach($aziende_fissi as $az_f)
 									<option value='{{$az_f->id_fiscale}}'>
 									{{$az_f->azienda}}</option>
 								@endforeach
 							</select>
-							<label for='list_aziende_fissi'>Listat Aziende Impianti Fissi</label>
-						</div>
+							<label for='list_aziende_fissi'>Lista Aziende Impianti Fissi</label>
+						
 					</div>
 					
 					<div class="col-md-4">
-												
-						<div class="form-floating mb-3 mb-md-0">
-							<select class='form-select aziende' id='dele_azienda' aria-label='dele_azienda' name='dele_azienda' onchange="view_dele(this.value)">
-								<option value=''>Select...</option>
-									@foreach($aziende_custom as $az_c)
-										<option value='{{$az_c->id}}'>
-										{{$az_c->azienda}}</option>
-									@endforeach								
-							</select>
-							<label for='dele_azienda'>Lista Aziende Definite</label>
-							<button type='button' class='btn btn-secondary mt-2' style='display:none'  onclick='dele_az()'  id='btn_dele_az'><i class='fa fa-trash'></i> Elimina</button>
-							
-						</div>
+						<select class='form-select aziende select2' id='dele_azienda' aria-label='dele_azienda' name='dele_azienda' onchange="view_dele(this.value);check_add(3)">
+							<option value=''>Select...</option>
+								@foreach($aziende_custom as $az_c)
+									<option value=''>
+									{{$az_c->azienda}}</option>
+								@endforeach								
+						</select>
+						<label for='dele_azienda'>Lista Aziende Definite</label>
+						<button type='button' class='btn btn-secondary mt-2' style='display:none'  onclick='dele_az()'  id='btn_dele_az'><i class='fa fa-trash'></i> Elimina</button>
 					</div>				
 					
 						
@@ -135,6 +146,13 @@
  @section('content_plugin')
 	<!-- jQuery -->
 	<script src="plugins/jquery/jquery.min.js"></script>
+	<!--select2 !-->
+	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	
+
+	<!-- per upload -->
+	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.300"></script>
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.409"></script>		
 	<!-- Bootstrap 4 -->
 	<script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 	<!-- AdminLTE App -->
@@ -156,6 +174,6 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/aziende.js?ver=1.417"></script>
+	<script src="{{ URL::asset('/') }}dist/js/aziende.js?ver=1.449"></script>
 
 @endsection
