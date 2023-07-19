@@ -143,6 +143,28 @@ class AjaxController extends Controller
 		$filename=$request->input("filename");
 		$file_user=$request->input("file_user");
 		$url_completo="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore/$filename";
+		
+		///il documento inviato, popola anche i documenti azienda
+		
+		$azienda = trim(preg_replace('/\s+/', ' ', $azienda));
+		//rimozione eventuali caratteri di troppo
+		$id_a=hash("md5",$azienda);
+		$sub="allegati/aziende/$id_a";
+		@mkdir($sub);
+		$url_azienda = "$sub/".$filename;
+		copy ($url_completo,$url_azienda);
+	
+		$documenti = new documenti_azienda;
+		$documenti->dele=0;
+		$documenti->id_funzionario=$ref_user;
+		$documenti->filename=$filename;
+		$documenti->azienda=$azienda;
+		$documenti->id_azienda=$id_a;
+		$documenti->file_user=$file_user;
+		$documenti->url_completo=$url_azienda;
+
+		$documenti->save();		
+		////////////////////////////////////////////////////
 
 		
 		$id_ref = DB::table("schemi")
