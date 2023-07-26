@@ -54,7 +54,7 @@
 					  </li>
 				  </li>	
 		  
-			@if ($user->hasRole('admin'))
+			
 				<li class="nav-item menu">
 					<a href="#" class="nav-link">
 					  <i class="nav-icon fas fa-users"></i>
@@ -62,7 +62,17 @@
 						<i class="right fas fa-angle-left"></i>
 					  </p>
 					</a>
+					
 					<ul class="nav nav-treeview">
+					 <li class="nav-item">
+						  <li class="nav-item">
+							<a href="{{route('aziende')}}" class="nav-link">
+							  <i class="far fa-circle nav-icon"></i>
+							  <p>Gestione Aziende</p>
+							</a>
+						  </li>
+					  </li>
+					@if ($user->hasRole('admin'))
 					  <li class="nav-item">
 						<a href="{{route('definizione_utenti')}}" class="nav-link">
 						  <i class="far fa-circle nav-icon"></i>
@@ -85,15 +95,6 @@
 						</a>
 					  </li>
 
-					  <li class="nav-item">
-						  <li class="nav-item">
-							<a href="{{route('aziende')}}" class="nav-link">
-							  <i class="far fa-circle nav-icon"></i>
-							  <p>Gestione Aziende</p>
-							</a>
-						  </li>
-					  </li>
-					  
 
 					  <li class="nav-item">
 						  <li class="nav-item">
@@ -103,9 +104,11 @@
 							</a>
 						  </li>
 					  </li>
+					@endif			
 					</ul>  
+			
 				</li>
-			@endif	  
+
 
           
 			<li class="nav-item">

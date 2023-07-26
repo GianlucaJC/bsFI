@@ -46,11 +46,9 @@ Route::group(['only_log' => ['auth']], function () {
 	->middleware(['role:admin']);
 
 
-	Route::get('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende'])
-	->middleware(['role:admin']);
+	Route::get('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende']);
 	
-	Route::post('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende'])
-	->middleware(['role:admin']);
+	Route::post('aziende', [ 'as' => 'aziende', 'uses' => 'App\Http\Controllers\ControllerArchivi@aziende']);
 
 
 	Route::get('definizione_attivita', [ 'as' => 'definizione_attivita', 'uses' => 'App\Http\Controllers\ControllerArchivi@definizione_attivita'])
