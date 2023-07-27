@@ -451,9 +451,9 @@ public function __construct()
 			->orderBy("created_at","desc")->get();
 			
 		}
-		
+		$ref_user=$this->id_user;
 
-		return view('all_views/gestione/documenti')->with('utenti', $utenti)->with('documenti', $documenti)->with('attivita',$attivita)->with('categorie',$categorie)->with('settori',$settori);
+		return view('all_views/gestione/documenti')->with('utenti', $utenti)->with('documenti', $documenti)->with('attivita',$attivita)->with('categorie',$categorie)->with('settori',$settori)->with('ref_user',$ref_user);
 	}
 	
 
@@ -483,7 +483,9 @@ public function __construct()
 		->orderBy('c.descrizione')
 		->get();
 
-		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti)->with('cat_doc_utili',$cat_doc_utili);
+		$ref_user=$this->id_user;
+
+		return view('all_views/gestione/documenti_utili')->with('documenti_utili', $documenti_utili)->with('utenti',$utenti)->with('cat_doc_utili',$cat_doc_utili)->with('ref_user',$ref_user);
 	}
 	
 	public function documenti_azienda(Request $request) {
@@ -504,8 +506,9 @@ public function __construct()
 		->select('d.id','d.azienda','d.id_azienda','d.dele','d.id_funzionario','d.filename','d.file_user','d.url_completo','d.created_at',)
 		->where('d.dele','=',0)
 		->orderBy("d.created_at","desc")->get();
-
-		return view('all_views/gestione/documenti_azienda')->with('documenti_azienda', $documenti_azienda)->with('utenti',$utenti);
+		$ref_user=$this->id_user;
+		
+		return view('all_views/gestione/documenti_azienda')->with('documenti_azienda', $documenti_azienda)->with('utenti',$utenti)->with('ref_user',$ref_user);
 	}	
 
 
@@ -560,8 +563,9 @@ public function __construct()
 		}
 		$aziende_e=$this->get_aziende_e();
 		$aziende_fissi=$this->get_aziende_fissi();	
+		$aziende_custom=$this->get_aziende_custom();
 
-		return view('all_views/gestione/assegnazioni')->with('utenti', $utenti)->with('assegnazioni',$assegnazioni)->with('user_az',$user_az)->with('aziende_e',$aziende_e)->with('aziende_fissi',$aziende_fissi)->with('msg_err',$msg_err);
+		return view('all_views/gestione/assegnazioni')->with('utenti', $utenti)->with('assegnazioni',$assegnazioni)->with('user_az',$user_az)->with('aziende_e',$aziende_e)->with('aziende_fissi',$aziende_fissi)->with('aziende_custom',$aziende_custom)->with('msg_err',$msg_err);
 	}
 
 

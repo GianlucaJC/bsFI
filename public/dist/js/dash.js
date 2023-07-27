@@ -167,10 +167,19 @@ function view_row(ref_user,periodo,id_categoria,id_attivita,id_settore,azienda) 
 									html+="</tr>";
 								html+="</thead>";
 								html+="<tbody>";
+								entr=0
+								user_log=0
 								$.each(JSON.parse(data), function (i, item) {
+									if (entr==0) {
+										user_log=item.user_log
+										entr=1
+									}
 									html+="<tr id='tr_doc"+item.id+"'>";
-										html+="<td> <span id='dele_doc"+item.id+"'></span>";
-											html+="<button type='button' class='btn btn-warning btn-sm' onclick='delerow("+item.id+")'>Elimina</button>";
+										html+="<td>";
+										if (user_log==item.id_funzionario) {
+											html+="<span id='dele_doc"+item.id+"'></span>";
+												html+="<button type='button' class='btn btn-warning btn-sm' onclick='delerow("+item.id+")'>Elimina</button>";
+										}
 										html+="</td>";
 										html+="<td>";
 											if (item.azienda)

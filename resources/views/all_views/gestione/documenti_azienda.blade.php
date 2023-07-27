@@ -91,9 +91,11 @@
 									{{ $documento->azienda }}
 								</td>
 								<td>
+								@if ($documento->id_funzionario==$ref_user)								
 									<a href='#' onclick="dele_element({{$documento->id}})">
 										<button type="submit" name='dele_ele' class="btn btn-danger"><i class="fas fa-trash"></i></button>	
-									</a>								
+									</a>
+								@endif
 								</td>
 
 							</tr>

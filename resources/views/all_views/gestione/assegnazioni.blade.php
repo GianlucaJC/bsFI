@@ -92,8 +92,10 @@
 							<select class='form-select aziende' id='list_aziende_custom' aria-label='list_aziende_custom' name='list_aziende_custom' onchange='set_a(3)'>
 								<option value=''>Select...</option>
 								
+								@foreach($aziende_custom as $az_c)
 									<option value=''>
-									</option>
+									{{$az_c->azienda}}</option>
+								@endforeach	
 								
 							</select>
 							<label for='list_aziende_custom'>Aziende Definite</label>

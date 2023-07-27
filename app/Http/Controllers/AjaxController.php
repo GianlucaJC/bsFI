@@ -344,7 +344,7 @@ class AjaxController extends Controller
 		$id_settore=$request->input("id_settore");
 
 		$inforow = DB::table("documenti")
-		->select("id",DB::raw("DATE_FORMAT(documenti.periodo_data,'%d-%m-%Y') as periodo_data"),'filename','file_user','url_completo','azienda')
+		->select("id",DB::raw("DATE_FORMAT(documenti.periodo_data,'%d-%m-%Y') as periodo_data"),'id_funzionario','filename','file_user','url_completo','azienda')
 		->when(strlen($ref_user)!=0 && $ref_user!="all", function ($inforow) use ($ref_user) {
 			return $inforow->where('id_funzionario','=',$ref_user);
 		})			
@@ -358,6 +358,7 @@ class AjaxController extends Controller
 		->where('id_attivita', "=",$id_attivita)
 		->where('id_settore', "=",$id_settore)
 		->get();
+		if (isset($inforow[0])) $inforow[0]->user_log=Auth::user()->id;		
 		echo json_encode($inforow);
 		
 	}

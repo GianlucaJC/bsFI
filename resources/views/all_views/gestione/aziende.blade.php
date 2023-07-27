@@ -101,7 +101,7 @@
 						<select class='form-select aziende select2' id='dele_azienda' aria-label='dele_azienda' name='dele_azienda' onchange="view_dele(this.value);check_add(3)">
 							<option value=''>Select...</option>
 								@foreach($aziende_custom as $az_c)
-									<option value=''>
+									<option value='{{$az_c->azienda}}'>
 									{{$az_c->azienda}}</option>
 								@endforeach								
 						</select>
