@@ -1,5 +1,5 @@
 csv_send=false
-
+num_file=0
 $(function(){
  //set_class_allegati(0)
  
@@ -104,6 +104,7 @@ function set_class_allegati() {
     },
     onNewFile: function(id, file){
       // When a new file is added using the file selector or the DnD area
+
       ui_add_log('Nuovo file aggiunto #' + id);
       ui_multi_add_file(id, file);
     },
@@ -125,6 +126,13 @@ function set_class_allegati() {
     },
     onUploadSuccess: function(id, data){
       // A file was successfully uploaded
+	  num_file++
+	  console.log("num_file",num_file)
+	  if (num_file>1) {
+		num_file=0;
+		alert("Attenzione! Non è possibile simultaneamente al server.")
+		$('#modalvalue').modal('hide')
+	  }	  
 	  
 	  fx=data.path
 	  

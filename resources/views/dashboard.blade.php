@@ -365,13 +365,13 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.372"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.374"></script>
 
 	<!--select2 !-->
 	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.300"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.393"></script>	
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.311"></script>
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.401"></script>	
 	
 @endsection

@@ -611,6 +611,7 @@ function step2(value) {
 	azienda=$("#azienda").val()
 	id_settore=$("#list_settori").val();
 	
+	console.log("periodo",periodo,"azienda",azienda,"id_settore",id_settore)
 	if (id_settore.length==0 || azienda.length==0 || periodo.length!=7) {
 		$("#div_step2").empty();
 		$("#btn_save").prop("disabled",true);
