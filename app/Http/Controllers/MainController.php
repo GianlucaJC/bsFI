@@ -525,7 +525,7 @@ public function __construct()
 			->select('a.id')
 			->where('a.azienda', "=",$azienda)
 			->count();
-			if ($count==0) {
+			if ($count==0 || 1==1) {
 				$assegnazioni = new assegnazioni;
 				$assegnazioni->dele=0;
 				$assegnazioni->id_user=$user_ass;
