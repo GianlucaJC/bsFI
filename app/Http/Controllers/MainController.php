@@ -352,6 +352,11 @@ public function __construct()
 		$elenco[13]['bcolor']="yellow";
 		$elenco[13]['color']="black";
 		$elenco[13]['dele']=0;
+
+		$elenco[14]['settore']="Generico";
+		$elenco[14]['bcolor']="gray";
+		$elenco[14]['color']="white";
+		$elenco[14]['dele']=0;
 		
 		$elenco[3]['settore']="LEGNO IND";
 		$elenco[3]['bcolor']="green";
