@@ -300,7 +300,7 @@
 						echo "<tr>";
 						echo "<td></td><td></td>";
 						foreach($settori as $id_settore=>$v) {
-							echo "<td style='text-align:right'>";
+							echo "<td style='text-align:center'>";
 								if (isset($sum_set[$id_settore])){
 									if ($sum_set[$id_settore]!=0) {
 										echo "<b>";
