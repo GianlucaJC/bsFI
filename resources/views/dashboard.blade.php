@@ -216,6 +216,7 @@
 					  <thead>
 					  <tr>
 						<th></th>
+						<th style='background-color:dodgerblue'>TOTALE</th>
 						<?php
 							foreach($settori as $id_settore=>$v) {
 								$obj=$settori[$id_settore];
@@ -225,7 +226,7 @@
 							}
 						?>
 
-						<th style=''>TOTALE</th>
+						
 						<th>More</th>
 					  </tr>
 					  </thead>
@@ -246,6 +247,19 @@
 									echo "<a href='javascript:void(0)' class='text-muted' $js>$descr</a>";
 								echo "</b></td>";
 								
+								$tot_row=0;
+								foreach($settori as $id_settore=>$v) {
+									$v1="0";
+									if (isset($schema[$categoria][$id_attivita][$id_settore])) 
+										$v1=$schema[$categoria][$id_attivita][$id_settore];
+									$tot_row+=$v1;
+								}					
+														
+								echo "<td style='text-align:right'>";
+								if ($tot_row!="0")
+									echo "<b>$tot_row</b>";
+								echo "</td>";
+								
 								foreach($settori as $id_settore=>$v) {
 									$js_view=" onclick=\"view_row('$ref_user','$periodo',$categoria,$id_attivita,$id_settore,'$azienda');\"";
 									
@@ -265,8 +279,8 @@
 									  echo "</a>";
 									echo "</td>";
 								}	
-							echo "<td></td>";
-							echo "<td>";
+							
+							echo "<td style='text-align:center'>";
 								echo "<a href='javascript:void(0)' class='text-muted' $js>";
 									echo "<i class='fas fa-search'></i>";
 								echo "</a>";
