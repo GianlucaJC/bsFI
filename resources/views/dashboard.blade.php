@@ -258,7 +258,7 @@
 										$v1=$schema[$categoria][$id_attivita][$id_settore];
 									$tot_row+=$v1;
 									if (!isset($sum_set[$id_settore]))
-										$sum_set[$id_settore]=0;
+										$sum_set[$id_settore]=$v1;
 									else
 										$sum_set[$id_settore]+=$v1;
 								}					
@@ -298,7 +298,7 @@
 							
 						}
 						echo "<tr>";
-						echo "<td></td>";
+						echo "<td></td><td></td>";
 						foreach($settori as $id_settore=>$v) {
 							echo "<td style='text-align:right'>";
 								if (isset($sum_set[$id_settore])){
