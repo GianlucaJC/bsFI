@@ -197,7 +197,8 @@
 
 			foreach($categorie as $categoria=>$categ) {
 				if (isset($attivita_index[$categoria])) {
-				$sum_set=array();	
+				$sum_set=array();
+				$sum_global_set=0;
 				?>
 				
 				<div class="card">
@@ -229,7 +230,7 @@
 						?>
 
 						
-						<th>More</th>
+						<th>View</th>
 					  </tr>
 					  </thead>
 					  <tbody>
@@ -262,8 +263,9 @@
 									else
 										$sum_set[$id_settore]+=$v1;
 								}					
-														
-								echo "<td style='text-align:right'>";
+								$sum_global_set+=$tot_row;
+								
+								echo "<td style='text-align:center'>";
 								if ($tot_row!="0")
 									echo "<b>$tot_row</b>";
 								echo "</td>";
@@ -298,7 +300,8 @@
 							
 						}
 						echo "<tr>";
-						echo "<td></td><td></td>";
+						echo "<td ></td>";
+						echo "<td style='text-align:center'><b>$sum_global_set</b></td>";
 						foreach($settori as $id_settore=>$v) {
 							echo "<td style='text-align:center'>";
 								if (isset($sum_set[$id_settore])){
