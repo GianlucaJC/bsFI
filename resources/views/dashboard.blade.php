@@ -196,7 +196,9 @@
 		
 
 			foreach($categorie as $categoria=>$categ) {
-				if (isset($attivita_index[$categoria])) {?>
+				if (isset($attivita_index[$categoria])) {
+				$sum_set=array();	
+				?>
 				
 				<div class="card">
 					<div class="card-header border-0">
@@ -233,6 +235,7 @@
 					  <tbody>
 					  <?php
 						$attivita=$attivita_index[$categoria];
+						
 						for ($sca=0;$sca<=count($attivita)-1;$sca++) {
 							if (!isset($attivita[$sca]['descrizione'])) continue;
 							
@@ -248,11 +251,16 @@
 								echo "</b></td>";
 								
 								$tot_row=0;
+								
 								foreach($settori as $id_settore=>$v) {
 									$v1="0";
 									if (isset($schema[$categoria][$id_attivita][$id_settore])) 
 										$v1=$schema[$categoria][$id_attivita][$id_settore];
 									$tot_row+=$v1;
+									if (!isset($sum_set[$id_settore]))
+										$sum_set[$id_settore]=0;
+									else
+										$sum_set[$id_settore]+=$v1;
 								}					
 														
 								echo "<td style='text-align:right'>";
@@ -288,7 +296,23 @@
 
 							echo "</tr>";
 							
-						}?>
+						}
+						echo "<tr>";
+						echo "<td></td>";
+						foreach($settori as $id_settore=>$v) {
+							echo "<td style='text-align:right'>";
+								if (isset($sum_set[$id_settore])){
+									if ($sum_set[$id_settore]!=0) {
+										echo "<b>";
+											echo $sum_set[$id_settore];
+										echo "</b>";
+									}	
+								}
+							echo "</td>";
+							
+						}
+						echo "<tr>";
+						?>
 						
 					  </tbody>
 					</table>
