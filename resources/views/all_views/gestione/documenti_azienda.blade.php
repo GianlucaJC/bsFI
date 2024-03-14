@@ -62,7 +62,7 @@
 						<tr>
 							<th>Data ora</th>
 							<th>Utente</th>
-							<th>Documento</th>
+							<th style="max-width:400px">Documento</th>
 							<th>Azienda</th>
 							<th>Elimina</th>
 						</tr>
@@ -75,10 +75,13 @@
 									{{ $documento->created_at}}
 								</td>
 								<td>
-									{{ $utenti[$documento->id_funzionario] }}
+									<?php 
+										if (isset($utenti[$documento->id_funzionario] ))
+											echo $utenti[$documento->id_funzionario];
+									?>
 								</td>
 
-								<td>
+								<td style="max-width:400px">
 									<a href="{{$documento->url_completo}}" target='_blank'>
 										@if (strlen($documento->file_user)==0)
 											{{ $documento->filename }}	
@@ -106,7 +109,7 @@
 						<tr>
 							<th>Data ora</th>
 							<th>Utente</th>
-							<th>Documento</th>
+							<th style="max-width:400px">Documento</th>
 							<th>Azienda</th>
 							<th></th>
 						</tr>
@@ -153,7 +156,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_azienda.js?ver=1.59"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_azienda.js?ver=1.79"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>

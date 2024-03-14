@@ -62,7 +62,7 @@
 						<tr>
 							<th>Data ora</th>
 							<th>Utente</th>
-							<th>Documento</th>
+							<th style="max-width:400px">Documento</th>
 							<th>Categoria</th>
 							<th>Elimina</th>
 						</tr>
@@ -78,7 +78,7 @@
 									{{ $utenti[$documento->id_funzionario] }}
 								</td>
 
-								<td>
+								<td style="max-width:400px">
 									<a href="{{$documento->url_completo}}" target='_blank'>
 										@if (strlen($documento->file_user)==0)
 											{{ $documento->filename }}	
@@ -106,7 +106,7 @@
 						<tr>
 							<th>Data ora</th>
 							<th>Utente</th>
-							<th>Documento</th>
+							<th style="max-width:400px">Documento</th>
 							<th>Categoria</th>
 							<th></th>
 						</tr>
@@ -193,7 +193,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.58"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_utili.js?ver=1.60"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>

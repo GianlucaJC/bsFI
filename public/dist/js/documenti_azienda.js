@@ -18,7 +18,8 @@ $(document).ready( function () {
 		
 		if ($(this).text() !== '') {
 	        var isStatusColumn = (($(this).text() == 'Status') ? true : false);
-			var select = $('<select><option value=""></option></select>')
+			
+			var select = $('<select style="max-width:400px"><option value=""></option></select>')
 	            .appendTo( $(this).empty() )
 	            .on( 'change', function () {
 	                var val = $(this).val();
@@ -29,6 +30,7 @@ $(document).ready( function () {
 	            } );
 	 		
 			// Get the Status values a specific way since the status is a anchor/image
+
 			if (isStatusColumn) {
 				var statusItems = [];
 				
@@ -47,10 +49,18 @@ $(document).ready( function () {
 			}
             // All other non-Status columns (like the example)
 			else {
-				table.column( i ).data().unique().sort().each( function ( d, j ) {  
-					select.append( '<option value="'+d+'">'+d+'</option>' );
+				table.column( i ).data().unique().sort().each( function ( d, j ) {
+					dx=d
+					if (i==2){
+						var regex = /(&nbsp;|<([^>]+)>)/ig
+						,   body = d
+						,   dx = body.replace(regex, "");
+												
+					}
+					select.append( '<option value="'+dx+'">'+dx+'</option>' );
 		        } );	
 			}
+
 	        
 		}
     } );
