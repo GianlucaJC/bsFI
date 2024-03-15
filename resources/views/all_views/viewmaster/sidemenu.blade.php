@@ -222,11 +222,14 @@
 							echo "<font color='white'><h5>Cantieri assegnati</h5></font>";
 							for ($ele=0;$ele<=count($info_cantieri[$ref_u])-1;$ele++) {
 								$ragione_sociale=$info_cantieri[$ref_u][$ele]['azienda'];
+								/*
 								echo "<span class='d-block ml-4 text-info'>";
 									echo $ragione_sociale;
 								echo "</span>";
+								*/
 								$id_a=$info_cantieri[$ref_u][$ele]['id_azienda'];
 								$id_cantiere=$info_cantieri[$ref_u][$ele]['id_cantiere'];
+								$aziende=$info_cantieri[$ref_u][$ele]['aziende'];
 								
 								$url="https://www.filleaoffice.it/filleago/index.php/sito/organizza?cantiere=$id_a";
 								
@@ -252,6 +255,21 @@
 								echo "<a href='javascript:void(0)' onclick='newdocincantiere($id_cantiere)' class='d-inline nav-link p-1 $ml'>";
 									echo "<i class='fas fa-folder-plus'></i>";
 								echo "</a>";
+								echo "<br>";
+								echo "<font color='yellow' size='0.5pt'>";
+								foreach ($aziende as $azi) {
+									$rif_fo=$azi->rif_fo;
+									$tb_fo=$azi->tb_fo;
+									$rif_fo=strtoupper($rif_fo);
+									if ($rif_fo!=null && $tb_fo!=null&& $rif_fo=="T2_TOSC_A"){
+										echo "<span class='d-inline ml-5 p-1'>- ";
+											echo $azi->denominazione."<br>";
+										echo "</span>";	
+									}	
+								}
+								echo "</font>";
+
+								
 
 								
 							}
