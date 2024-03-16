@@ -578,7 +578,6 @@ function view_form() {
 				html+="<label for='list_aziende_custom'>Azienda definita</label>";
 			//html+="</div>";
 		html+="</div>";			
-		
 
 		
 		
@@ -609,6 +608,8 @@ function step2(value) {
 	
 	periodo=$("#periodo").val();
 	azienda=$("#azienda").val()
+	
+
 	id_settore=$("#list_settori").val();
 	
 	console.log("periodo",periodo,"azienda",azienda,"id_settore",id_settore)

@@ -63,7 +63,8 @@
 							<th>Data ora</th>
 							<th>Utente</th>
 							<th style="max-width:400px">Documento</th>
-							<th>Azienda</th>
+							<th style="max-width:200px">Azienda</th>
+							<th>Cantiere</th>
 							<th>Elimina</th>
 						</tr>
 					</thead>
@@ -90,8 +91,11 @@
 										@endif
 									</a>
 								</td>
-								<td>
+								<td style="max-width:200px">
 									{{ $documento->azienda }}
+								</td>
+								<td>
+									{{ $documento->cantiere_custom }}
 								</td>
 								<td>
 								@if ($documento->id_funzionario==$ref_user)								
@@ -110,7 +114,8 @@
 							<th>Data ora</th>
 							<th>Utente</th>
 							<th style="max-width:400px">Documento</th>
-							<th>Azienda</th>
+							<th style="max-width:200px">Azienda</th>
+							<th>Cantiere</th>
 							<th></th>
 						</tr>
 					</tfoot>					
@@ -156,7 +161,7 @@
 	
 	
 
-	<script src="{{ URL::asset('/') }}dist/js/documenti_azienda.js?ver=1.79"></script>
+	<script src="{{ URL::asset('/') }}dist/js/documenti_azienda.js?ver=1.88"></script>
 	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>

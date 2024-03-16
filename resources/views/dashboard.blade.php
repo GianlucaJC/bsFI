@@ -117,6 +117,7 @@
 				</div>
 			</div>
 			<input type='hidden' name='azienda' id='azienda' value='{{$azienda}}'>
+			
 			@if ($user->hasRole('admin') || 1==1)
 				
 				<div class="col-md-6">
@@ -381,6 +382,16 @@
       <div class="modal-body" id='bodyvalue'>
         ...
       </div>
+
+		<div class="modal-body">
+			<div class='col-sm-12'>
+				
+			<input class='form-control' id='cantiere_custom' name='cantiere_custom' type='text' placeholder='Cantiere (Facoltativo)' maxlength=100 />
+			<label for='cantiere_custom'>Cantiere</label>
+				
+			</div>	
+		</div>		
+	  
 	  <div id='div_wait' class='mb-3'></div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" id='btn_close' onclick='close_doc()'>Chiudi</button>
@@ -406,13 +417,13 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.374"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.392"></script>
 
 	<!--select2 !-->
 	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	
 	<!-- per upload -->
 	<script src="{{ URL::asset('/') }}dist/js/upload/jquery.dm-uploader.min.js"></script>
 	<script src="{{ URL::asset('/') }}dist/js/upload/demo-ui.js?ver=1.311"></script>
-	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.401"></script>	
+	<script src="{{ URL::asset('/') }}dist/js/upload/demo-config.js?ver=2.411"></script>	
 	
 @endsection

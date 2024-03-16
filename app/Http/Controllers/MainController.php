@@ -513,7 +513,7 @@ public function __construct()
 			@unlink($doc_remove);
 		}		
 		$documenti_azienda = DB::table('documenti_azienda as d')
-		->select('d.id','d.azienda','d.id_azienda','d.dele','d.id_funzionario','d.filename','d.file_user','d.url_completo','d.created_at',)
+		->select('d.id','d.azienda','d.id_azienda','d.dele','d.id_funzionario','d.filename','d.file_user','d.url_completo','d.cantiere_custom','d.created_at',)
 		->where('d.dele','=',0)
 		->orderBy("d.created_at","desc")->get();
 		$ref_user=$this->id_user;

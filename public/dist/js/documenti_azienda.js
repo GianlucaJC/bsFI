@@ -18,8 +18,10 @@ $(document).ready( function () {
 		
 		if ($(this).text() !== '') {
 	        var isStatusColumn = (($(this).text() == 'Status') ? true : false);
-			
-			var select = $('<select style="max-width:400px"><option value=""></option></select>')
+			wx="200px";
+
+			if (i==2) wx="400px";
+			var select = $('<select style="max-width:'+wx+'"><option value=""></option></select>')
 	            .appendTo( $(this).empty() )
 	            .on( 'change', function () {
 	                var val = $(this).val();

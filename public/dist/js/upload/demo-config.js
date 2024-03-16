@@ -39,7 +39,7 @@ function set_class_allegati() {
 		  "periodo":periodo,
 		  "id_categoria":id_categoria,
 		  "id_attivita":id_attivita,
-		  "id_settore":id_settore
+		  "id_settore":id_settore,
 		}
 	}
 	
@@ -196,6 +196,8 @@ function saveinfo() {
 		console.log("false");
 		return false
 	}	
+	cantiere_custom=$("#cantiere_custom").val()
+	if (!cantiere_custom) cantiere_custom="";
 	file_user=$("#file_user").val()
 	if (file_user.length==0) {
 		alert("Definire un nome per l'allegato da inviare al server!");
@@ -217,7 +219,7 @@ function saveinfo() {
 			headers: {
 			  "Content-type": "application/x-www-form-urlencoded; charset=UTF-8"
 			},
-			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&azienda='+saveinfo.azienda+'&filename='+saveinfo.filename+"&file_user="+file_user
+			body: '_token='+ CSRF_TOKEN+'&ref_user='+saveinfo.ref_user+'&periodo='+saveinfo.periodo+'&id_categoria='+saveinfo.id_categoria+'&id_attivita='+saveinfo.id_attivita+'&id_settore='+saveinfo.id_settore+'&azienda='+saveinfo.azienda+'&filename='+saveinfo.filename+"&file_user="+file_user+"&cantiere_custom="+cantiere_custom
 		})
 		.then(response => {
 			if (response.ok) {

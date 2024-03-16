@@ -142,6 +142,7 @@ class AjaxController extends Controller
 		$azienda=$request->input("azienda");
 		$filename=$request->input("filename");
 		$file_user=$request->input("file_user");
+		$cantiere_custom=$request->input("cantiere_custom");
 		$url_completo="allegati/$ref_user/$periodo/$id_categoria/$id_attivita/$id_settore/$filename";
 		
 		///il documento inviato, popola anche i documenti azienda
@@ -162,6 +163,7 @@ class AjaxController extends Controller
 		$documenti->id_azienda=$id_a;
 		$documenti->file_user=$file_user;
 		$documenti->url_completo=$url_azienda;
+		$documenti->cantiere_custom=$cantiere_custom;
 
 		$documenti->save();		
 		////////////////////////////////////////////////////
