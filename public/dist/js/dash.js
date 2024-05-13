@@ -253,7 +253,7 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 						
 						$("#bodyvalue").html(html)
 						
-						$('.aziende,#cantiere_custom').select2({
+						$('.aziende,#cantiere_custom1').select2({
 							dropdownParent: $('#modalvalue')
 						});	
 						

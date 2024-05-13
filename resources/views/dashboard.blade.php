@@ -386,17 +386,17 @@
 		<div class="modal-body">
 			<div class='col-sm-12'>
 				
-			<!--	
-			<input class='form-control' id='cantiere_custom' name='cantiere_custom' type='text' placeholder='Cantiere (Facoltativo)' maxlength=100 />
-			!-->
+				
+				<input class='form-control' id='cantiere_custom' name='cantiere_custom' type='text' placeholder='Cantiere (Facoltativo)' maxlength=100 />
+				<hr>
 
-				<select class='form-control select2' id='cantiere_custom' aria-label='cantiere custom' name='cantiere_custom'>
+				<select class='form-control select2' id='cantiere_custom1' aria-label='cantiere custom1' name='cantiere_custom1' onchange="$('#cantiere_custom').val(this.value)">
 					<option value=''>Select...</option>
 						@foreach($cantieri_custom as $cant)
 							<option value='{{$cant->cantiere_custom}}'>{{$cant->cantiere_custom}}</option>
 						@endforeach
 				</select>
-				<label for='cantiere_custom'>Cantiere (Facoltativo)</label>
+				<label for='cantiere_custom1'>Elenco cantieri)</label>
 			</div>	
 		</div>		
 	  
@@ -425,7 +425,7 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.398"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.399"></script>
 
 	<!--select2 !-->
 	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	
