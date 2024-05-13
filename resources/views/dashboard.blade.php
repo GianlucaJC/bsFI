@@ -396,7 +396,7 @@
 							<option value='{{$cant->cantiere_custom}}'>{{$cant->cantiere_custom}}</option>
 						@endforeach
 				</select>
-				<label for='cantiere_custom1'>Elenco cantieri)</label>
+				<label for='cantiere_custom1'>Elenco cantieri</label>
 			</div>	
 		</div>		
 	  
