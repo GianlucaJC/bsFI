@@ -595,6 +595,7 @@ function view_form() {
 
 	
 	html+="<a href='javascript:void(0)' onclick='step2(1)' class='link-primary'>Definizione allegato</a>";
+	html+="<a href='javascript:void(0)' onclick=\"$('#div_step2').hide()\" class='ml-3 link-primary'>Chiudi definizione allegato</a>";
 	
 	
 	html+="<div id='div_step2' class='mt-3'></div>";
@@ -605,7 +606,7 @@ function view_form() {
 }
 
 function step2(value) {
-	
+	$
 	periodo=$("#periodo").val();
 	azienda=$("#azienda").val()
 	
@@ -646,7 +647,7 @@ function step2(value) {
 	})
 	.then(resp=>{
 		//$("#div_sezione"+sezione).html(resp);
-		
+		$("#div_step2").show()
 		$("#div_step2").html(resp);
 		file_user=$("#file_user").val()
 		//function set_class_allegati() in demo-config.js
