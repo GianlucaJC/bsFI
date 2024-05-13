@@ -386,9 +386,17 @@
 		<div class="modal-body">
 			<div class='col-sm-12'>
 				
+			<!--	
 			<input class='form-control' id='cantiere_custom' name='cantiere_custom' type='text' placeholder='Cantiere (Facoltativo)' maxlength=100 />
-			<label for='cantiere_custom'>Cantiere</label>
-				
+			!-->
+
+				<select class='form-control select2' id='cantiere_custom' aria-label='cantiere custom' name='cantiere_custom'>
+					<option value=''>Select...</option>
+						@foreach($cantieri_custom as $cant)
+							<option value='{{$cant->cantiere_custom}}'>{{$cant->cantiere_custom}}</option>
+						@endforeach
+				</select>
+				<label for='cantiere_custom'>Cantiere (Facoltativo)</label>
 			</div>	
 		</div>		
 	  
@@ -417,7 +425,7 @@
 	<!-- AdminLTE App -->
 	<script src="{{ URL::asset('/') }}dist/js/adminlte.min.js"></script>
 	
-	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.396"></script>
+	<script src="{{ URL::asset('/') }}dist/js/dash.js?ver=1.398"></script>
 
 	<!--select2 !-->
 	<script src="{{ URL::asset('/') }}plugins/select2/js/select2.full.min.js"></script>	

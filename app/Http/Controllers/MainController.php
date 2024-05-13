@@ -96,9 +96,11 @@ public function __construct()
 		}
 		//if ($this->tipouser==1) 
 		$ref_user=$funzionario;
-
-
-
+		
+		$cantieri_custom = DB::table('documenti_azienda as d')
+		->select('cantiere_custom')
+		->groupBy('cantiere_custom')
+		->orderBy("cantiere_custom")->get();
 		
 
 
@@ -113,7 +115,7 @@ public function __construct()
 		
 		$schema1=$this->schema($request,2,$funzionario,$azienda,$periodo);
 
-		return view('dashboard')->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti)->with('oper_sel',$oper_sel)->with('azi_sel',$azi_sel)->with('azienda',$azienda)->with('per_sel',$per_sel);
+		return view('dashboard')->with('cantieri_custom',$cantieri_custom)->with('user',$this->user)->with('attivita_index', $attivita_index)->with('categorie',$categorie)->with('settori',$settori)->with('periodi',$periodi)->with('periodo',$periodo)->with('funzionario',$funzionario)->with('periodo1',$periodo1)->with('funzionario1',$funzionario1)->with('users',$users)->with("schema",$schema)->with("schema1",$schema1)->with('ref_user',$ref_user)->with('confr',$confr)->with("num_noti",$num_noti)->with('oper_sel',$oper_sel)->with('azi_sel',$azi_sel)->with('azienda',$azienda)->with('per_sel',$per_sel);
 		
 	}	
 	

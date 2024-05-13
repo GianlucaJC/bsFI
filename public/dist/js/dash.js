@@ -1,5 +1,4 @@
 $(document).ready( function () {
-
 });
 
 function delerow(id_row) {
@@ -254,7 +253,7 @@ function setvalue(ref_user,periodo,id_categoria,id_attivita) {
 						
 						$("#bodyvalue").html(html)
 						
-						$('.aziende').select2({
+						$('.aziende,#cantiere_custom').select2({
 							dropdownParent: $('#modalvalue')
 						});	
 						
